@@ -9,9 +9,9 @@ url="https://www.rdkit.org/"
 arch="all"
 license="BSD 3-Clause License"
 depends=""
-# Note. makedepends includes two packages not to build:
-# py3-numpy: to set PYTHON_NUMPY_INCLUDE_PATH not to build
-# py3-pillow: to pass ctest not to build
+# Note. makedepends includes packages not for building APKs:
+# py3-numpy: to set PYTHON_NUMPY_INCLUDE_PATH (for robustness on version change)
+# py3-pillow: to pass ctest
 makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-numpy py3-pillow python3-dev"
 install=""
 subpackages="$pkgname-dev $pkgname-doc"
