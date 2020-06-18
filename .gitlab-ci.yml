@@ -1,0 +1,62 @@
+stages:
+  - build
+  - test
+  - release
+  - silly
+
+build:
+  stage: build
+  only:
+    changes:
+      - APKBUILD
+  image: registry.gitlab.com/daverona/docker/apkbuild:3.10
+  artifacts:
+    when: on_success
+    expire_in: 60 min
+    paths:
+      - APKINDEX.tar.gz
+      - ./*.apk
+  script:
+    # Prepare inputs
+    - echo "PACKAGER_PRIVKEY=\"/builder/.abuild/$PUBLISHER_KEYNAME.rsa\"" > /builder/.abuild/abuild.conf
+    - echo "$PUBLISHER_PRVKEY" > "/builder/.abuild/$PUBLISHER_KEYNAME.rsa"
+    - echo "$PUBLISHER_PUBKEY" > "/builder/.abuild/$PUBLISHER_KEYNAME.rsa.pub"
+    - sudo cp "/builder/.abuild/$PUBLISHER_KEYNAME.rsa.pub" /etc/apk/keys
+    # Build APKs
+    - cp -R * /builder/repository
+    - cd /builder/repository && abuild -r -c && cd -
+    # Prepare outputs 
+    - cp /builder/packages/builder/x86_64/APKINDEX.tar.gz .
+    - cp /builder/packages/builder/x86_64/*.apk .
+
+test:
+  stage: test
+  dependencies:
+    - build
+  only:
+    changes:
+      - APKBUILD
+  image: alpine:3.10
+  script:
+    # Test installing APKs
+    - echo "$PUBLISHER_PUBKEY" > "/etc/apk/keys/$PUBLISHER_KEYNAME.rsa.pub"
+    - apk add *.apk
+    # Test executable
+
+release:
+  stage: release 
+  dependencies:
+    - build
+  only:
+    refs:
+      - tags
+    changes:
+      - APKBUILD
+  script:
+    # Think how to get artifacts and release them.
+    - echo "You silly."
+
+silly:
+  stage: silly
+  script:
+    - echo "You silly."
