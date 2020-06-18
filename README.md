@@ -1,5 +1,7 @@
 # daverona/alpine/rdkit
 
+[![pipeline status](https://gitlab.com/daverona/alpine/rdkit/badges/master/pipeline.svg)](https://gitlab.com/daverona/alpine/rdkit/-/commits/master)
+
 This is a repository of Alpine APKs of [RDKit]().
 
 * GitLab repository: [https://gitlab.com/daverona/alpine/rdkit](https://gitlab.com/daverona/alpine/rdkit)
