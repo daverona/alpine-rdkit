@@ -20,9 +20,8 @@ prepare() {
 }
 
 build() {
-  cd "$builddir"
-  mkdir build
-  cd build
+  mkdir -p "$builddir/build"
+  cd "$builddir/build"
   cmake .. \
     -Wno-dev \
     -DRDK_INSTALL_INTREE=OFF \
@@ -33,15 +32,14 @@ build() {
     -DPYTHON_NUMPY_INCLUDE_PATH="$(python3 -c 'import numpy; print(numpy.get_include())')" \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release
-  # Patch isascii
+  # patch isascii
   sed -i "s|__isascii|isascii|" ../External/INCHI-API/src/INCHI_BASE/src/util.c
   make -j $(nproc)
-  make install
 }
 
 check() {
   cd "$builddir/build"
-  RDBASE="$builddir" ctest
+  RDBASE="$pkgdir/lib" ctest
 }
 
 package() {
