@@ -38,8 +38,9 @@ build() {
 }
 
 check() {
+  cd "$builddir/build"
   make install
-  RDBASE="/usr/lib" ctest
+  RDBASE="$builddir" ctest
 }
 
 package() {
