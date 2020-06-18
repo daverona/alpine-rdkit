@@ -24,6 +24,7 @@ build:
     - sudo cp "/builder/.abuild/$PUBLISHER_KEYNAME.rsa.pub" /etc/apk/keys
     # Build APKs
     - cp -R * /builder/repository
+    - abuild-apk update
     - cd /builder/repository && abuild -r -c && cd -
     # Prepare outputs 
     - cp /builder/packages/builder/x86_64/APKINDEX.tar.gz .
