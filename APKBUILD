@@ -22,7 +22,7 @@ prepare() {
 build() {
   mkdir -p "$builddir/build"
   cd "$builddir/build"
-  cmake .. \
+  RDBASE=/usr cmake .. \
     -Wno-dev \
     -DRDK_INSTALL_INTREE=OFF \
     -DRDK_BUILD_CAIRO_SUPPORT=ON \
@@ -38,8 +38,8 @@ build() {
 }
 
 check() {
-  cd "$builddir/build"
-  RDBASE="$pkgdir/lib" ctest
+  make install
+  RDBASE="/usr/lib" ctest
 }
 
 package() {
