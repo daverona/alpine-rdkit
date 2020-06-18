@@ -12,7 +12,7 @@ build:
   image: registry.gitlab.com/daverona/docker/apkbuild:3.10
   artifacts:
     when: on_success
-    expire_in: 60 min
+    expire_in: 360 min
     paths:
       - APKINDEX.tar.gz
       - ./*.apk

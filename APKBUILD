@@ -39,7 +39,7 @@ build() {
 
 check() {
   cd "$builddir/build"
-  make install
+  sudo make DESTDIR=/usr install
   RDBASE="$builddir" ctest
 }
 
