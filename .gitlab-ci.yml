@@ -12,23 +12,21 @@ build:
   image: registry.gitlab.com/daverona/docker/apkbuild:3.10
   artifacts:
     when: on_success
-    expire_in: 360 min
+    expire_in: 60 min
     paths:
       - APKINDEX.tar.gz
       - ./*.apk
   script:
     # Prepare inputs
-    - echo "PACKAGER_PRIVKEY=\"/builder/.abuild/$PUBLISHER_KEYNAME.rsa\"" > /builder/.abuild/abuild.conf
-    - echo "$PUBLISHER_PRVKEY" > "/builder/.abuild/$PUBLISHER_KEYNAME.rsa"
-    - echo "$PUBLISHER_PUBKEY" > "/builder/.abuild/$PUBLISHER_KEYNAME.rsa.pub"
-    - sudo cp "/builder/.abuild/$PUBLISHER_KEYNAME.rsa.pub" /etc/apk/keys
+    - echo "$BUILDER_PRIVKEY" > "/builder/.abuild/$BUILDER_KEYNAME.rsa"
+    - echo "$BUILDER_PUBKEY" | sudo tee "/etc/apk/keys/$BUILDER_KEYNAME.rsa.pub"
+    - export PACKAGER_PRIVKEY="/builder/.abuild/$BUILDER_KEYNAME.rsa"
     # Build APKs
-    - cp -R * /builder/repository
-    - abuild-apk update
-    - cd /builder/repository && abuild -r -c && cd -
+    - cp -R APKBUILD /work
+    - cd /work && abuild -r -c && cd -
     # Prepare outputs 
-    - cp /builder/packages/builder/x86_64/APKINDEX.tar.gz .
-    - cp /builder/packages/builder/x86_64/*.apk .
+    - export APKBUILD_ARCH=$(arch)
+    - cp /packages/$APKBUILD_ARCH/* .
 
 test:
   stage: test
@@ -40,8 +38,8 @@ test:
   image: alpine:3.10
   script:
     # Test installing APKs
-    - echo "$PUBLISHER_PUBKEY" > "/etc/apk/keys/$PUBLISHER_KEYNAME.rsa.pub"
-    - apk add *.apk
+    - echo "$BUILDER_PUBKEY" > "/etc/apk/keys/$BUILDER_KEYNAME.rsa.pub"
+    - apk add -v *.apk
     # Test executable
 
 release:
