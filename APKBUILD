@@ -11,8 +11,8 @@ license="BSD 3-Clause License"
 depends=""
 # Note. makedepends includes packages not for building APKs:
 # py3-numpy: to set PYTHON_NUMPY_INCLUDE_PATH (for robustness on version change)
-# py3-pillow: to pass ctest
 makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-numpy py3-pillow python3-dev"
+checkdepends="py3-pillow"
 install=""
 subpackages="$pkgname-dev $pkgname-doc"
 source="https://github.com/rdkit/$pkgname/archive/$_pkgver.tar.gz"
@@ -26,15 +26,15 @@ build() {
   mkdir -p "$builddir/build"
   cd "$builddir/build"
   RDBASE=/usr cmake .. \
-    -Wno-dev \
-    -DRDK_INSTALL_INTREE=OFF \
-    -DRDK_BUILD_CAIRO_SUPPORT=ON \
-    -DRDK_BUILD_INCHI_SUPPORT=ON \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
     -DPYTHON_INCLUDE_DIR="$(python3 -c 'from sysconfig import get_paths; print(get_paths()["include"])')" \
     -DPYTHON_NUMPY_INCLUDE_PATH="$(python3 -c 'import numpy; print(numpy.get_include())')" \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_BUILD_TYPE=Release
+    -DRDK_INSTALL_INTREE=OFF \
+    -DRDK_BUILD_CAIRO_SUPPORT=ON \
+    -DRDK_BUILD_INCHI_SUPPORT=ON \
+    -Wno-dev
   # patch isascii
   sed -i "s|__isascii|isascii|" ../External/INCHI-API/src/INCHI_BASE/src/util.c
   make -j $(nproc)
