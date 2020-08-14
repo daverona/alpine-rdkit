@@ -1,5 +1,5 @@
 # Contributor: daverona <daverona@nowhere.on.earth>
-# Maintainer:
+# Maintainer: daverona <daverona@nowhere.on.earth>
 pkgname="py3-rdkit"
 _pkgname="rdkit"
 pkgver="2020.03.3"
@@ -10,11 +10,8 @@ url="https://www.rdkit.org/"
 arch="all"
 license="BSD 3-Clause License"
 depends=""
-# Note. makedepends includes packages not for building APKs:
-# py3-numpy: to set PYTHON_NUMPY_INCLUDE_PATH (for robustness on version change)
 makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-numpy py3-pillow python3-dev"
 checkdepends="py3-pillow"
-#install=""
 #subpackages="$pkgname-dev $pkgname-doc"
 source="https://github.com/rdkit/$_pkgname/archive/Release_$_pkgver.tar.gz"
 builddir="$srcdir/$_pkgname-Release_$_pkgver"
