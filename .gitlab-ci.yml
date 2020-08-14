@@ -22,6 +22,7 @@ build:
     - echo "$BUILDER_PUBKEY" | sudo tee "/etc/apk/keys/$BUILDER_KEYNAME.rsa.pub"
     - export PACKAGER_PRIVKEY="/builder/.abuild/$BUILDER_KEYNAME.rsa"
     # Build APKs
+    - abuild-apk update
     - cp -R APKBUILD /work
     - cd /work && abuild -r -c && cd -
     # Prepare outputs 
