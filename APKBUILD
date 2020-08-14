@@ -41,7 +41,7 @@ build() {
 check() {
   cd "$builddir/build"
   sudo make install
-  RDBASE="$builddir" ctest || true
+  RDBASE="$builddir" ctest
 }
 
 package() {
