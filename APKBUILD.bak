@@ -41,8 +41,8 @@ build() {
 
 check() {
   cd "$builddir/build"
-  sudo make install
-  RDBASE="$builddir" ctest
+#  sudo make install
+#  RDBASE="$builddir" ctest
 }
 
 package() {
@@ -61,7 +61,7 @@ _py3() {
 
   local site_packages="$(python3 -c 'import site; print(site.getsitepackages()[0])')"
   mkdir -p "$subpkgdir/$site_packages"
-  mv "$pkgdir/$site_packages/$pkgname" "$subpkgdir/$site_packages/$pkgname"
+  mv "$pkgdir/$site_packages/$pkgname" "$subpkgdir/$site_packages/"
 }
 
 sha512sums="7f5d626d52e360551a62de9c0df5055c74b2022ce874ef3077a2dfc95f7a6b99430428c787d45978563fcc174f00b30c1dbc7d9f8e19d82aa28f1c62d5408d59  Release_2020_03_3.tar.gz"
