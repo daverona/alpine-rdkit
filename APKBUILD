@@ -11,13 +11,14 @@ arch="all"
 license="BSD 3-Clause License"
 depends=""
 makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-numpy py3-pillow python3-dev"
-checkdepends="py3-pillow"
+checkdepends="gfortran py3-pillow"
 #subpackages="$pkgname-dev $pkgname-doc"
 source="https://github.com/rdkit/$_pkgname/archive/Release_$_pkgver.tar.gz"
 builddir="$srcdir/$_pkgname-Release_$_pkgver"
 
 prepare() {
   default_prepare
+  sudo pip3 install setuptools wheel pandas
 }
 
 build() {
@@ -40,7 +41,7 @@ build() {
 
 check() {
   cd "$builddir/build"
-  sudo make install
+  make install
   RDBASE="$builddir" ctest
 }
 
