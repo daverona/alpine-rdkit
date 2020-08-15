@@ -12,7 +12,7 @@ depends="boost-iostreams boost-python3 boost-regex boost-serialization boost-sys
 depends_dev=""
 makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-cairo py3-numpy python3-dev"
 checkdepends="gfortran py3-pillow"
-subpackages="$pkgname-dev py3-$pkgname:_py3 $pkgname-data:_data:noarch"
+subpackages="$pkgname-dev $pkgname-static py3-$pkgname:py3 $pkgname-data:data:noarch"
 source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
 builddir="$srcdir/$pkgname-Release_$_pkgver"
 
@@ -52,7 +52,7 @@ package() {
   make DESTDIR="$pkgdir" install
 }
 
-_data() {
+data() {
   pkgdesc="$pkgdesc (data files)"
   #depends="$pkgname"
 
@@ -60,7 +60,7 @@ _data() {
   mv "$pkgdir/usr/share/RDKit" "$subpkgdir/usr/share/"
 }
 
-_py3() {
+py3() {
   #replaces="py-rdkit" # Backwards compatibility
   #provides="py-rdkit=$pkgver-r$pkgrel" # Backwards compatibility
   pkgdesc="$pkgdesc (for python3)"
