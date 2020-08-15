@@ -39,13 +39,13 @@ build() {
   make -j $(nproc)
 }
 
-#check() {
-#  cd "$builddir/build"
-#  sudo pip3 install pandas wheel
-#  sudo make install
-#  RDBASE="$builddir" ctest
-#  sudo rm -rf "$builddir/build/install_manifest.txt"
-#}
+check() {
+  cd "$builddir/build"
+  sudo pip3 install pandas wheel
+  sudo make install
+  RDBASE="$builddir" ctest
+  sudo rm -rf "$builddir/build/install_manifest.txt"
+}
 
 package() {
   cd "$builddir/build"
