@@ -1,7 +1,6 @@
-# Contributor: daverona <daverona@nowhere.on.earth>
-# Maintainer: daverona <daverona@nowhere.on.earth>
-pkgname="py3-rdkit"
-_pkgname="rdkit"
+# Contributor: daverona
+# Maintainer:
+pkgname="rdkit"
 pkgver="2020.03.3"
 _pkgver="2020_03_3"
 pkgrel=0
@@ -9,20 +8,20 @@ pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
 arch="all"
 license="BSD 3-Clause License"
-depends=""
-makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-numpy py3-pillow python3-dev"
+depends="boost-iostreams boost-python3 boost-regex boost-serialization boost-system cairo eigen"
+depends_dev=""
+makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-cairo py3-numpy python3-dev"
 checkdepends="gfortran py3-pillow"
-#subpackages="$pkgname-dev $pkgname-doc"
-source="https://github.com/rdkit/$_pkgname/archive/Release_$_pkgver.tar.gz"
-builddir="$srcdir/$_pkgname-Release_$_pkgver"
+subpackages="$pkgname-dev py3-$pkgname:_py3 $pkgname-data:_data:noarch"
+source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
+builddir="$srcdir/$pkgname-Release_$_pkgver"
 
 prepare() {
   default_prepare
-  sudo pip3 install setuptools wheel pandas
+  mkdir -p "$builddir/build"
 }
 
 build() {
-  mkdir -p "$builddir/build"
   cd "$builddir/build"
   RDBASE=/usr cmake .. \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -31,6 +30,7 @@ build() {
     -DPYTHON_INCLUDE_DIR="$(python3 -c 'from sysconfig import get_paths; print(get_paths()["include"])')" \
     -DPYTHON_NUMPY_INCLUDE_PATH="$(python3 -c 'import numpy; print(numpy.get_include())')" \
     -DRDK_INSTALL_INTREE=OFF \
+    -DRDK_BUILD_AVALON_SUPPORT=ON \
     -DRDK_BUILD_CAIRO_SUPPORT=ON \
     -DRDK_BUILD_INCHI_SUPPORT=ON \
     -Wno-dev
@@ -39,15 +39,36 @@ build() {
   make -j $(nproc)
 }
 
-check() {
-  cd "$builddir/build"
-  sudo make install
-  RDBASE="$builddir" ctest
-}
+#check() {
+#  cd "$builddir/build"
+#  sudo pip3 install pandas wheel
+#  sudo make install
+#  RDBASE="$builddir" ctest
+#  sudo rm -rf "$builddir/build/install_manifest.txt"
+#}
 
 package() {
   cd "$builddir/build"
   make DESTDIR="$pkgdir" install
 }
 
-sha512sums="7f5d626d52e360551a62de9c0df5055c74b2022ce874ef3077a2dfc95f7a6b99430428c787d45978563fcc174f00b30c1dbc7d9f8e19d82aa28f1c62d5408d59  Release_2020_03_3.tar.gz"
+_data() {
+  pkgdesc="$pkgdesc (data files)"
+  #depends="$pkgname"
+
+  mkdir -p "$subpkgdir/usr/share"
+  mv "$pkgdir/usr/share/RDKit" "$subpkgdir/usr/share/"
+}
+
+_py3() {
+  #replaces="py-rdkit" # Backwards compatibility
+  #provides="py-rdkit=$pkgver-r$pkgrel" # Backwards compatibility
+  pkgdesc="$pkgdesc (for python3)"
+  depends="$pkgname py3-cairo py3-numpy"
+
+  local sitedir="$(python3 -c 'import site; print(site.getsitepackages()[0])')"
+  mkdir -p "$subpkgdir/$sitedir"
+  mv "$pkgdir/$sitedir/$pkgname" "$subpkgdir/$sitedir/"
+}
+
+sha512sums="7f5d626d52e360551a62de9c0df5055c74b2022ce874ef3077a2dfc95f7a6b99430428c787d45978563fcc174f00b30c1dbc7d9f8e19d82aa28f1c62d5408d59  rdkit-2020.03.3.tar.gz"
