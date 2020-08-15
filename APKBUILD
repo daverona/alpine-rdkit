@@ -7,12 +7,12 @@ pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software" 
 url="https://www.rdkit.org/"
 arch="all"
-license="BSD 3-Clause License"
+license="BSD-3-Clause"
 depends="boost-iostreams boost-python3 boost-regex boost-serialization boost-system cairo eigen"
 depends_dev=""
 makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-cairo py3-numpy python3-dev"
 checkdepends="gfortran py3-pillow"
-subpackages="$pkgname-dev $pkgname-static py3-$pkgname:py3 $pkgname-data:data:noarch"
+subpackages="$pkgname-data:data:noarch py3-$pkgname:py3 $pkgname-static $pkgname-dev"
 source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
 builddir="$srcdir/$pkgname-Release_$_pkgver"
 
@@ -39,13 +39,13 @@ build() {
   make -j $(nproc)
 }
 
-check() {
-  cd "$builddir/build"
-  sudo pip3 install pandas wheel
-  sudo make install
-  RDBASE="$builddir" ctest
-  sudo rm -rf "$builddir/build/install_manifest.txt"
-}
+#check() {
+#  cd "$builddir/build"
+#  sudo pip3 install pandas wheel
+#  sudo make install
+#  RDBASE="$builddir" ctest
+#  sudo rm -rf "$builddir/build/install_manifest.txt"
+#}
 
 package() {
   cd "$builddir/build"
@@ -54,15 +54,14 @@ package() {
 
 data() {
   pkgdesc="$pkgdesc (data files)"
-  #depends="$pkgname"
+  depends="$pkgname"
 
   mkdir -p "$subpkgdir/usr/share"
   mv "$pkgdir/usr/share/RDKit" "$subpkgdir/usr/share/"
 }
 
 py3() {
-  #replaces="py-rdkit" # Backwards compatibility
-  #provides="py-rdkit=$pkgver-r$pkgrel" # Backwards compatibility
+  # This subpackage contains shared libraries, which makes the subpackage depend on architecture.
   pkgdesc="$pkgdesc (for python3)"
   depends="$pkgname py3-cairo py3-numpy"
 
