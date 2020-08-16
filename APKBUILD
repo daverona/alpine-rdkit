@@ -43,7 +43,7 @@ check() {
   cd "$builddir/build"
   sudo pip3 install wheel pandas
   sudo make install
-  RDBASE="$builddir" ctest
+  RDBASE="$builddir" ctest -j $(nproc)
   sudo rm -rf "$builddir/build/install_manifest.txt"
 }
 
@@ -54,7 +54,7 @@ package() {
 
 data() {
   pkgdesc="$pkgdesc (data files)"
-  depends="$pkgname"
+  depends="$pkgname=$pkgver-$pkgrel"
 
   mkdir -p "$subpkgdir/usr/share"
   mv "$pkgdir/usr/share/RDKit" "$subpkgdir/usr/share/"
@@ -63,7 +63,7 @@ data() {
 py3() {
   # This subpackage contains shared libraries, which makes the subpackage depend on architecture.
   pkgdesc="$pkgdesc (for python3)"
-  depends="$pkgname py3-cairo py3-numpy"
+  depends="$pkgname=$pkgver-$pkgrel py3-cairo py3-numpy"
 
   local sitedir="$(python3 -c 'import site; print(site.getsitepackages()[0])')"
   mkdir -p "$subpkgdir/$sitedir"
@@ -71,3 +71,4 @@ py3() {
 }
 
 sha512sums="7f5d626d52e360551a62de9c0df5055c74b2022ce874ef3077a2dfc95f7a6b99430428c787d45978563fcc174f00b30c1dbc7d9f8e19d82aa28f1c62d5408d59  rdkit-2020.03.3.tar.gz"
+
