@@ -14,7 +14,7 @@ makedepends="boost-dev cairo-dev cmake eigen-dev py-numpy-dev py3-cairo py3-nump
 checkdepends="gfortran py3-pillow"
 subpackages="$pkgname-data:data:noarch py3-$pkgname:py3 $pkgname-static $pkgname-dev"
 source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
-builddir="$srcdir/$pkgname-Release_$_pkgver"
+builddir="$srcdir/rdkit-Release_$_pkgver"
 
 prepare() {
   default_prepare
