@@ -1,8 +1,8 @@
 # Contributor: daverona
 # Maintainer:
-pkgname="rdkit"
-pkgver="2020.03.3"
-_pkgver="2020_03_3"
+pkgname=rdkit
+pkgver=2020.03.3
+_pkgver=2020_03_3
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software" 
 url="https://www.rdkit.org/"
@@ -22,7 +22,7 @@ prepare() {
 }
 
 build() {
-  cd "$builddir/build"
+  cd build
   RDBASE=/usr cmake .. \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
@@ -40,15 +40,15 @@ build() {
 }
 
 check() {
-  cd "$builddir/build"
+  cd build
   sudo pip3 install wheel pandas
   sudo make install
   RDBASE="$builddir" ctest -j $(nproc)
-  sudo rm -rf "$builddir/build/install_manifest.txt"
+  sudo rm -rf install_manifest.txt
 }
 
 package() {
-  cd "$builddir/build"
+  cd build
   make DESTDIR="$pkgdir" install
 }
 
