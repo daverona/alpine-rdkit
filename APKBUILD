@@ -41,7 +41,7 @@ build() {
 
 check() {
   cd "$builddir/build"
-  sudo pip3 install pandas wheel
+  sudo pip3 install wheel pandas
   sudo make install
   RDBASE="$builddir" ctest
   sudo rm -rf "$builddir/build/install_manifest.txt"
