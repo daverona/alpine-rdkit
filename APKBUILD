@@ -51,8 +51,7 @@ package() {
 }
 
 py3() {
-  # This subpackage contains shared libraries, 
-  # which makes it not independent from architecture.
+  # This subpackage contains shared libraries, which makes it dependent on architecture.
   pkgdesc="$pkgdesc (for python3)"
   depends="$pkgname py3-cairo py3-numpy"
 
