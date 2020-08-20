@@ -82,7 +82,7 @@ check() {
   local tmpcurr=$(mktemp)
   local tmpdiff=$(mktemp)
   pip3 freeze | sort >> "$tmpprev"
-  sudo pip3 install wheel pandas
+  sudo pip3 install wheel "pandas==1.1.0"
   pip3 freeze | sort >> "$tmpcurr"
   comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
   rm -rf "$tmpprev" "$tmpcurr"
