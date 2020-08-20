@@ -21,5 +21,3 @@ This is a repository of Alpine APKs of [RDKit](https://www.rdkit.org/).
 
 * RDKit repository: [https://github.com/rdkit/rdkit](https://github.com/rdkit/rdkit)
 * RDKit Installation: [https://www.rdkit.org/docs/Install.html](https://www.rdkit.org/docs/Install.html)
-
-https://gist.github.com/jirutka/6717f68c7f76c9425b21d0cbe2eaa007
