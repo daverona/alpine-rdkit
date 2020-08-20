@@ -8,7 +8,7 @@ pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
 arch="all"
 license="BSD-3-Clause"
-#options="!check"  # Don't call check() if the building environment is shared with others. It starts and stops postgresql server.
+#options="!check"  # Don't check if the building environment is shared with others. It will start and stop postgresql server.
 depends="
   boost-iostreams 
   boost-python3 
@@ -63,8 +63,10 @@ build() {
     -DRDK_INSTALL_INTREE=OFF \
     -DRDK_BUILD_AVALON_SUPPORT=ON \
     -DRDK_BUILD_CAIRO_SUPPORT=ON \
+    -DRDK_BUILD_FREESASA_SUPPORT=ON \
     -DRDK_BUILD_INCHI_SUPPORT=ON \
     -DRDK_BUILD_PGSQL=ON \
+    -DRDK_BUILD_TEST_GZIP=ON \
     -Wno-dev
   # error: undefined reference to `__isascii'
   # INCHI-API is downloaded by rdkit, so it cannot be patched beforehand.
@@ -76,11 +78,18 @@ build() {
 check() {
   cd build
   # Install check dependencies which cannot be specified in $checkdepends
+  local tmpprev=$(mktemp)
+  local tmpcurr=$(mktemp)
+  local tmpdiff=$(mktemp)
+  pip3 freeze | sort >> "$tmpprev"
   sudo pip3 install wheel pandas
+  pip3 freeze | sort >> "$tmpcurr"
+  comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
+  rm -rf "$tmpprev" "$tmpcurr"
   sudo make install
   RDBASE="$builddir" ctest -j $(nproc) -E testPgSQL
 
-  # Do PostgreSQL test
+  # Test PostgreSQL cartridge
   # Install the cartridge
   sudo sh "$builddir"/build/Code/PgSQL/rdkit/pgsql_install.sh
   # Start the server
@@ -108,7 +117,8 @@ check() {
   # Uninstall check dependencies
   sudo rm -rf `cat install_manifest.txt`
   sudo rm -rf install_manifest.txt
-  sudo pip3 uninstall --yes wheel pandas
+  sudo pip3 uninstall --yes --requirement "$tmpdiff"
+  rm -rf "$tmpdiff"
 }
 
 package() {
