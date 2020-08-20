@@ -103,12 +103,12 @@ check() {
   sudo rm -rf /run/postgresql /tmp/postgresql
   # Delete the cartridge
   sudo rm -rf /usr/share/postgresql/extension/rdkit*
-  sudo rm -rf /usr/lib/postgresql/rdkit.so
+  sudo rm -rf /usr/lib/postgresql/librdkit.so
 
   # Uninstall check dependencies
   sudo rm -rf `cat install_manifest.txt`
   sudo rm -rf install_manifest.txt
-  sudo pip3 uninstall --yes wheel #pandas  # If you do mind pandas building time, use this
+  sudo pip3 uninstall --yes wheel pandas
 }
 
 package() {
@@ -126,7 +126,7 @@ data() {
 
 py3() {
   # This subpackage contains shared libraries, which makes it dependent on architecture.
-  # TODO: Remove if possible messages like "so:libRDKitForceField.so.1 (missing)".
+  # TODO: Remove, if possible, messages like "so:libRDKitForceField.so.1 (missing)".
   pkgdesc="$pkgdesc (for python3)"
   depends="
     $pkgname=$pkgver-r$pkgrel 
