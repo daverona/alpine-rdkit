@@ -145,9 +145,9 @@ py3() {
     py3-numpy
     " 
 
-  local pylibdir=$(basename $(find "$pkgdir/usr/lib" -type d -name "python*"))
+  local pydir=$(basename $(find "$pkgdir"/usr/lib -type d -name "python*"))
   mkdir -p "$subpkgdir"/usr/lib
-  mv "$pkgdir"/usr/lib/"$pylibdir" "$subpkgdir"/usr/lib/
+  mv "$pkgdir"/usr/lib/"$pydir" "$subpkgdir"/usr/lib/
   #cp -P "$pkgdir/"/usr/lib/*.so.1 "$subpkgdir"/usr/lib/
 }
 
