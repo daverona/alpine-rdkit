@@ -8,7 +8,7 @@ pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
 arch="all"
 license="BSD-3-Clause"
-#options="!check"  # Don't check if the building environment is shared with others. It will start and stop postgresql server.
+options="!check"  # Don't check if the building environment is shared with others. It will start and stop postgresql server.
 depends="
   boost-iostreams 
   boost-python3 
@@ -156,7 +156,7 @@ pgsql() {
 
   install -D "$builddir"/build/Code/PgSQL/rdkit/rdkit--3.8.sql "$subpkgdir"/usr/share/postgresql/extension/rdkit--3.8.sql
   install -D "$builddir"/Code/PgSQL/rdkit/rdkit.control "$subpkgdir"/usr/share/postgresql/extension/rdkit.control
-  install -D -m 0755 "$builddir"/build/Code/PgSQL/rdkit/librdkit.so "$subpkgdir"/usr/lib/postgresql/librdkit.so
+  install -D -m 755 "$builddir"/build/Code/PgSQL/rdkit/librdkit.so "$subpkgdir"/usr/lib/postgresql/librdkit.so
 }
 
 sha512sums="7f5d626d52e360551a62de9c0df5055c74b2022ce874ef3077a2dfc95f7a6b99430428c787d45978563fcc174f00b30c1dbc7d9f8e19d82aa28f1c62d5408d59  rdkit-2020.03.3.tar.gz"

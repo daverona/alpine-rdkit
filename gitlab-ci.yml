@@ -18,9 +18,9 @@ build:
       - ./*.apk
   script:
     # Prepare inputs
-    - echo "$BUILDER_PRIVKEY" > "/builder/.abuild/$BUILDER_KEYNAME.rsa"
-    - echo "$BUILDER_PUBKEY" | sudo tee "/etc/apk/keys/$BUILDER_KEYNAME.rsa.pub"
-    - export PACKAGER_PRIVKEY="/builder/.abuild/$BUILDER_KEYNAME.rsa"
+    - echo "$ABUILD_PRIVKEY" > "/abuild/.abuild/$ABUILD_KEYNAME.rsa"
+    - echo "$ABUILD_PUBKEY" | sudo tee "/etc/apk/keys/$ABUILD_KEYNAME.rsa.pub"
+    - export PACKAGER_PRIVKEY="/abuild/.abuild/$ABUILD_KEYNAME.rsa"
     # Build APKs
     - abuild-apk update
     - cp -R APKBUILD /work
