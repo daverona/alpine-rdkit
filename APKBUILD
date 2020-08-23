@@ -136,18 +136,18 @@ data() {
 
 py3() {
   # This subpackage contains shared libraries, which makes it dependent on architecture.
-  # TODO: Remove, if possible, messages like "so:libRDKitForceField.so.1 (missing)".
   pkgdesc="$pkgdesc (for python3)"
   depends="
-    $pkgname=$pkgver-r$pkgrel 
     $pkgname-data=$pkgver-r$pkgrel
     py3-cairo 
     py3-numpy
+    $pkgname=$pkgver-r$pkgrel 
     " 
 
-  local pydir=$(basename $(find "$pkgdir"/usr/lib -type d -name "python*"))
+  local pyver="${subpkgname:2:1}"
   mkdir -p "$subpkgdir"/usr/lib
-  mv "$pkgdir"/usr/lib/"$pydir" "$subpkgdir"/usr/lib/
+  mv "$pkgdir"/usr/lib/python$pyver* "$subpkgdir"/usr/lib/
+  # TODO: Remove, if possible, messages like "so:libRDKitForceField.so.1 (missing)".
   #cp -P "$pkgdir/"/usr/lib/*.so.1 "$subpkgdir"/usr/lib/
 }
 
