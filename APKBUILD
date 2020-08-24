@@ -8,7 +8,7 @@ pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
 arch="all"
 license="BSD-3-Clause"
-options="!check"  # Don't check if the building environment is shared with others. It will start and stop postgresql server.
+#options="!check"  # Don't check if the building environment is shared with others. It will start and stop postgresql server.
 depends="
   boost-iostreams 
   boost-python3 
@@ -147,6 +147,7 @@ py3() {
   local pyver="${subpkgname:2:1}"
   mkdir -p "$subpkgdir"/usr/lib
   mv "$pkgdir"/usr/lib/python$pyver* "$subpkgdir"/usr/lib/
+
   # TODO: Remove, if possible, messages like "so:libRDKitForceField.so.1 (missing)".
   #cp -P "$pkgdir/"/usr/lib/*.so.1 "$subpkgdir"/usr/lib/
 }
