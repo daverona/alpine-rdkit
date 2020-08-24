@@ -25,11 +25,13 @@ makedepends="
   cairo-dev 
   cmake 
   eigen-dev 
+  openjdk8
   postgresql-dev
   py-numpy-dev 
   py3-cairo 
   py3-numpy 
   python3-dev
+  swig
   "
 checkdepends="
   gfortran 
@@ -38,9 +40,11 @@ checkdepends="
   py3-pillow
   "
 subpackages="
-  $pkgname-doc
+  $pkgname-doc:doc:noarch
   $pkgname-data:data:noarch
   py3-$pkgname:py3 
+  $pkgname-java
+  $pkgname-java-doc:javadoc:noarch
   $pkgname-pgsql
   $pkgname-static 
   $pkgname-dev
@@ -56,6 +60,8 @@ prepare() {
 build() {
   cd build
   RDBASE=/usr \
+  PATH=/usr/lib/jvm/default-jvm/bin:$PATH \
+  JAVA_HOME=/usr/lib/jvm/default-jvm \
   cmake .. \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=RELEASE \
@@ -66,6 +72,7 @@ build() {
     -DRDK_BUILD_FREESASA_SUPPORT=ON \
     -DRDK_BUILD_INCHI_SUPPORT=ON \
     -DRDK_BUILD_PGSQL=ON \
+    -DRDK_BUILD_SWIG_WRAPPERS=ON \
     -DRDK_BUILD_TEST_GZIP=ON \
     -Wno-dev
   # error: undefined reference to `__isascii'
@@ -128,7 +135,7 @@ package() {
   mv "$pkgdir"/usr/share/RDKit "$pkgdir"/usr/share/rdkit
   mkdir -p "$pkgdir"/usr/share/doc
   mv "$pkgdir"/usr/share/rdkit/Docs "$pkgdir"/usr/share/doc/rdkit
-  mv "$pkgdir"/usr/share/rdkit/license.txt "$pkgdir"/usr/share/doc/rdkit/license.txt
+  cp "$pkgdir"/usr/share/rdkit/license.txt "$pkgdir"/usr/share/doc/rdkit/license.txt
 }
 
 data() {
@@ -141,12 +148,11 @@ data() {
 
 py3() {
   # This subpackage contains shared libraries, which makes it dependent on architecture.
-  pkgdesc="$pkgdesc (for python3)"
+  pkgdesc="$pkgdesc (for Python3)"
   depends="
-    $pkgname-data=$pkgver-r$pkgrel
+    $pkgname=$pkgver-r$pkgrel 
     py3-cairo 
     py3-numpy
-    $pkgname=$pkgver-r$pkgrel 
     " 
 
   local pyver="${subpkgname:2:1}"
@@ -164,6 +170,25 @@ pgsql() {
   install -D -m 644 "$builddir"/build/Code/PgSQL/rdkit/rdkit--3.8.sql "$subpkgdir"/usr/share/postgresql/extension/rdkit--3.8.sql
   install -D -m 644 "$builddir"/Code/PgSQL/rdkit/rdkit.control "$subpkgdir"/usr/share/postgresql/extension/rdkit.control
   install -D -m 755 "$builddir"/build/Code/PgSQL/rdkit/librdkit.so "$subpkgdir"/usr/lib/postgresql/librdkit.so
+}
+
+java() {
+  pkgdesc="$pkgdesc (Java wrapper)"
+  depends="py3-$pkgname=$pkgver-r$pkgrel"
+
+  mkdir -p "$subpkgdir"/usr/share/rdkit
+  mv "$pkgdir/$builddir"/Code/JavaWrappers "$subpkgdir"/usr/share/rdkit/
+  cp "$builddir"/Code/JavaWrappers/gmwrapper/*.jar "$subpkgdir"/usr/share/rdkit/JavaWrappers/gmwrapper/
+  local prefix=${builddir#/}
+  rm -rf "$pkgdir/${prefix%%/*}"
+}
+
+javadoc() {
+  pkgdesc="$pkgdesc (Java wrapper documentation)"
+  depends=
+
+  mkdir -p "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
+  cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc/* "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper/
 }
 
 sha512sums="a95d100280fb9d1fb95fbf54bf47c259c234f931bfe857feba87bd3e9304753c64c4c4c8d52a336d2543a5635c0c6b60661dea32fca866278fcce0fc0e0152d2  rdkit-2020.03.5.tar.gz"
