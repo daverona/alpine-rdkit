@@ -32,13 +32,13 @@ makedepends="
   python3-dev
   "
 checkdepends="
-  diffutils
   gfortran 
   postgresql
   postgresql-client
   py3-pillow
   "
 subpackages="
+  $pkgname-doc
   $pkgname-data:data:noarch
   py3-$pkgname:py3 
   $pkgname-pgsql
@@ -124,6 +124,11 @@ check() {
 package() {
   cd build
   make DESTDIR="$pkgdir" install
+
+  mv "$pkgdir"/usr/share/RDKit "$pkgdir"/usr/share/rdkit
+  mkdir -p "$pkgdir"/usr/share/doc
+  mv "$pkgdir"/usr/share/rdkit/Docs "$pkgdir"/usr/share/doc/rdkit
+  mv "$pkgdir"/usr/share/rdkit/license.txt "$pkgdir"/usr/share/doc/rdkit/license.txt
 }
 
 data() {
