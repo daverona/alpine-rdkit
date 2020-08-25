@@ -3,6 +3,5 @@
 !.gitignore
 !.gitlab-ci.yml
 !gitlab-ci.yml
-!daverona.rsa.pub
 !README.md
 !APKBUILD
