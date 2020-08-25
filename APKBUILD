@@ -1,5 +1,5 @@
-# Contributor: daverona
-# Maintainer:
+# Contributor: daverona <egkimatwork@gmail.com>
+# Maintainer: daverona <egkimatwork@gmail.com>
 pkgname=rdkit
 pkgver=2020.03.5
 _pkgver=2020_03_5
@@ -29,7 +29,7 @@ makedepends="
   postgresql-dev
   py-numpy-dev 
   py3-cairo 
-  py3-numpy 
+  py3-numpy
   python3-dev
   swig
   "
@@ -41,15 +41,17 @@ checkdepends="
   "
 subpackages="
   $pkgname-doc:doc:noarch
+  $pkgname-java-doc:javadoc:noarch
   $pkgname-data:data:noarch
   py3-$pkgname:py3 
   $pkgname-java
-  $pkgname-java-doc:javadoc:noarch
   $pkgname-pgsql
   $pkgname-static 
   $pkgname-dev
   "
-source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
+source="
+  rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
+  "
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
 prepare() {
@@ -109,7 +111,7 @@ check() {
   sudo chmod o+w -R "$builddir"/build/Code/PgSQL/rdkit
   # Do test
   sudo RDBASE="$builddir" -u postgres ctest -j $(nproc) -R testPgSQL
-  # Set permission and ownership
+  # Set permission and ownership back
   sudo chmod o-w -R "$builddir"/build/Testing/Temporary
   sudo chmod o-w -R "$builddir"/build/Code/PgSQL/rdkit
   sudo chown -R $(id -u):$(id -g) "$builddir"/build/Testing/Temporary
