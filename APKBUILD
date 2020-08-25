@@ -27,9 +27,8 @@ makedepends="
   eigen-dev 
   openjdk8
   postgresql-dev
-  py-numpy-dev 
   py3-cairo 
-  py3-numpy
+  py3-numpy-dev 
   python3-dev
   swig
   "
@@ -49,7 +48,10 @@ subpackages="
   $pkgname-static 
   $pkgname-dev
   "
-source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
+source="
+  rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
+  boost-above-1.56.0.patch
+  "
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
 prepare() {
@@ -191,4 +193,5 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc/* "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper/
 }
 
-sha512sums="a95d100280fb9d1fb95fbf54bf47c259c234f931bfe857feba87bd3e9304753c64c4c4c8d52a336d2543a5635c0c6b60661dea32fca866278fcce0fc0e0152d2  rdkit-2020.03.5.tar.gz"
+sha512sums="a95d100280fb9d1fb95fbf54bf47c259c234f931bfe857feba87bd3e9304753c64c4c4c8d52a336d2543a5635c0c6b60661dea32fca866278fcce0fc0e0152d2  rdkit-2020.03.5.tar.gz
+4dfdb72aa75f8d77f95cc458f48ca2207e77f5cf2e758ff0750ddc68a32c34301376957c12a442f9f199736c07111d8c2d7cda790051d54eece717c7c35faecc  boost-above-1.56.0.patch"
