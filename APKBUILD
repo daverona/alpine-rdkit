@@ -49,9 +49,7 @@ subpackages="
   $pkgname-static 
   $pkgname-dev
   "
-source="
-  rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
-  "
+source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
 prepare() {
