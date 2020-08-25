@@ -2,6 +2,5 @@
 */
 !.gitignore
 !.gitlab-ci.yml
-!gitlab-ci.yml
 !README.md
 !APKBUILD
