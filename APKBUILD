@@ -1,8 +1,8 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
 pkgname=rdkit
-pkgver=2020.03.5
-_pkgver=2020_03_5
+pkgver=2020.03.4
+_pkgver=2020_03_4
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software" 
 url="https://www.rdkit.org/"
@@ -49,9 +49,7 @@ subpackages="
   $pkgname-static 
   $pkgname-dev
   "
-source="
-  rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
-  "
+source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
 prepare() {
@@ -193,4 +191,4 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc/* "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper/
 }
 
-sha512sums="a95d100280fb9d1fb95fbf54bf47c259c234f931bfe857feba87bd3e9304753c64c4c4c8d52a336d2543a5635c0c6b60661dea32fca866278fcce0fc0e0152d2  rdkit-2020.03.5.tar.gz"
+sha512sums="2820fcb8e708c692b1f4e68f9f1645412195d9d7e24eff4372099b66987948e24059fa0bb5e0f88e66d34a68f60eb6f614813283f50be2d609b3b3bd2483c839  rdkit-2020.03.4.tar.gz"
