@@ -10,12 +10,12 @@ This is a repository of Alpine APKs of [RDKit](https://www.rdkit.org/).
 ## Installtion
 
 Download APK files and `daverona.rsa.pub` from the [release page](https://gitlab.com/daverona/alpine/rdkit/-/releases).
-And run these command in a terminal:
+And run these commands in a terminal (as root or sudoer):
 
 ```bash
-sudo cp daverona.rsa.pub /etc/apk/keys
-sudo apk add *.apk
-sudo rm -rf /etc/apk/keys/daverona.rsa.pub
+cp daverona.rsa.pub /etc/apk/keys
+apk add *.apk
+rm -rf /etc/apk/keys/daverona.rsa.pub
 ```
 
 ## References
