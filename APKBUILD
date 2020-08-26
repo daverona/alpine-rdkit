@@ -61,6 +61,8 @@ prepare() {
 }
 
 build() {
+  # Note that swig 4, which is the stock version for Alpine 3.12, is not supported
+  # by RDKit. So we install swig 3.0.12 and remove it later.
   cd "$srcdir"/swig-3.0.12
   ./configure --prefix=/usr
   make -j $(nproc)
