@@ -1,8 +1,8 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
 pkgname=rdkit
-pkgver=2020.03.5
-_pkgver=2020_03_5
+pkgver=2020.03.4
+_pkgver=2020_03_4
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software" 
 url="https://www.rdkit.org/"
@@ -32,7 +32,6 @@ makedepends="
   python3-dev
   "
 checkdepends="
-  gfortran 
   postgresql
   postgresql-client
   py3-pillow
@@ -97,17 +96,12 @@ build() {
 
 check() {
   cd build
-  # Install check dependencies which cannot be specified in $checkdepends
-  local tmpprev=$(mktemp)
-  local tmpcurr=$(mktemp)
-  local tmpdiff=$(mktemp)
-  pip3 freeze | sort >> "$tmpprev"
-  sudo pip3 install wheel "pandas==1.0.3"
-  pip3 freeze | sort >> "$tmpcurr"
-  comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
-  rm -rf "$tmpprev" "$tmpcurr"
+  # Install RDKit for testing
   sudo make install
-  RDBASE="$builddir" ctest -j $(nproc) -E testPgSQL
+
+  # Note that pythonTestDirChem test is disabled because of a bug in the source
+  # reported here: https://github.com/rdkit/rdkit/issues/2757#issue-516155570
+  RDBASE="$builddir" ctest -j $(nproc) -E "testPgSQL|pythonTestDirChem"
 
   # Test PostgreSQL cartridge
   # Install the cartridge
@@ -134,11 +128,9 @@ check() {
   sudo rm -rf /usr/share/postgresql/extension/rdkit*
   sudo rm -rf /usr/lib/postgresql/librdkit.so
 
-  # Uninstall check dependencies
+  # Uninstall RDKit
   sudo rm -rf `cat install_manifest.txt`
   sudo rm -rf install_manifest.txt
-  sudo pip3 uninstall --yes --requirement "$tmpdiff"
-  rm -rf "$tmpdiff"
 }
 
 package() {
@@ -204,6 +196,6 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc/* "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper/
 }
 
-sha512sums="a95d100280fb9d1fb95fbf54bf47c259c234f931bfe857feba87bd3e9304753c64c4c4c8d52a336d2543a5635c0c6b60661dea32fca866278fcce0fc0e0152d2  rdkit-2020.03.5.tar.gz
+sha512sums="2820fcb8e708c692b1f4e68f9f1645412195d9d7e24eff4372099b66987948e24059fa0bb5e0f88e66d34a68f60eb6f614813283f50be2d609b3b3bd2483c839  rdkit-2020.03.4.tar.gz
 5eaa2e06d8e4197fd02194051db1e518325dbb074a4c55a91099ad9c55193874f577764afc9029409a41bd520a95154095f26e33ef5add5c102bb2c1d98d33eb  swig-3.0.12.tar.gz
-4dfdb72aa75f8d77f95cc458f48ca2207e77f5cf2e758ff0750ddc68a32c34301376957c12a442f9f199736c07111d8c2d7cda790051d54eece717c7c35faecc  boost-above-1.56.0.patch"
+ee863c1c94ff959c0021c0ce7cecf099b8683129070b97184e026dc71d4ad1522d4746b09453848911287c73f272cc5c07eb51aa68bc81f88a53a5adbabc612f  boost-above-1.56.0.patch"
