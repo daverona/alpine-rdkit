@@ -86,19 +86,28 @@ build() {
 
 check() {
   cd build
+
+  # Problem: pandas 1.1.0 cannot be installed
+  # TODO: Apply the patch
+
   # Install check dependencies which cannot be specified in $checkdepends
   #local tmpprev=$(mktemp)
   #local tmpcurr=$(mktemp)
   #local tmpdiff=$(mktemp)
   #pip3 freeze | sort >> "$tmpprev"
-  #sudo pip3 install --verbose wheel "pandas==1.1.0"
+  #sudo pip3 install wheel "pandas==1.0.3"
   #pip3 freeze | sort >> "$tmpcurr"
   #comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
   #rm -rf "$tmpprev" "$tmpcurr"
   sudo make install
  
-  # TODO: Do pythonTestDirChem after installing pandas
+  # Problem: pythonTestDirChem fails with python 3.8
+  #   @see https://github.com/rdkit/rdkit/issues/2757#issue-516155570
+  # Solution: https://github.com/greglandrum/rdkit/commit/f993195777f7e91048fc1af06308c88ff2ecbcdc
+  # TODO: Apply the patch
+
   RDBASE="$builddir" ctest -j $(nproc) -E "testPgSQL|pythonTestDirChem"
+  #RDBASE="$builddir" ctest -j $(nproc) -E "testPgSQL"
 
   # Test PostgreSQL cartridge
   # Install the cartridge
