@@ -87,18 +87,16 @@ build() {
 check() {
   cd build
   # Install check dependencies which cannot be specified in $checkdepends
-  #local tmpprev=$(mktemp)
-  #local tmpcurr=$(mktemp)
-  #local tmpdiff=$(mktemp)
-  #pip3 freeze | sort >> "$tmpprev"
-  #sudo pip3 install --verbose wheel "pandas==1.1.0"
-  #pip3 freeze | sort >> "$tmpcurr"
-  #comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
-  #rm -rf "$tmpprev" "$tmpcurr"
+  local tmpprev=$(mktemp)
+  local tmpcurr=$(mktemp)
+  local tmpdiff=$(mktemp)
+  pip3 freeze | sort >> "$tmpprev"
+  sudo pip3 install wheel "pandas==1.0.3"
+  pip3 freeze | sort >> "$tmpcurr"
+  comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
+  rm -rf "$tmpprev" "$tmpcurr"
   sudo make install
- 
-  # TODO: Do pythonTestDirChem after installing pandas
-  RDBASE="$builddir" ctest -j $(nproc) -E "testPgSQL|pythonTestDirChem"
+  RDBASE="$builddir" ctest -j $(nproc) -E testPgSQL
 
   # Test PostgreSQL cartridge
   # Install the cartridge
@@ -128,8 +126,8 @@ check() {
   # Uninstall check dependencies
   sudo rm -rf `cat install_manifest.txt`
   sudo rm -rf install_manifest.txt
-  #sudo pip3 uninstall --yes --requirement "$tmpdiff"
-  #rm -rf "$tmpdiff"
+  sudo pip3 uninstall --yes --requirement "$tmpdiff"
+  rm -rf "$tmpdiff"
 }
 
 package() {
