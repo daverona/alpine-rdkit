@@ -4,3 +4,4 @@
 !.gitlab-ci.yml
 !README.md
 !APKBUILD
+!boost-above-1.56.0.patch
