@@ -86,18 +86,10 @@ build() {
 
 check() {
   cd build
-  # Install check dependencies which cannot be specified in $checkdepends
-  #local tmpprev=$(mktemp)
-  #local tmpcurr=$(mktemp)
-  #local tmpdiff=$(mktemp)
-  #pip3 freeze | sort >> "$tmpprev"
-  #sudo pip3 install --verbose wheel "pandas==1.1.0"
-  #pip3 freeze | sort >> "$tmpcurr"
-  #comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
-  #rm -rf "$tmpprev" "$tmpcurr"
+  # Install RDKit for testing
   sudo make install
- 
-  # TODO: Do pythonTestDirChem after installing pandas
+  # Note that pythonTestDirChem test is disabled because of a bug in the source
+  # reported here: https://github.com/rdkit/rdkit/issues/2757#issue-516155570
   RDBASE="$builddir" ctest -j $(nproc) -E "testPgSQL|pythonTestDirChem"
 
   # Test PostgreSQL cartridge
@@ -125,11 +117,9 @@ check() {
   sudo rm -rf /usr/share/postgresql/extension/rdkit*
   sudo rm -rf /usr/lib/postgresql/librdkit.so
 
-  # Uninstall check dependencies
+  # Uninstall RDKit
   sudo rm -rf `cat install_manifest.txt`
   sudo rm -rf install_manifest.txt
-  #sudo pip3 uninstall --yes --requirement "$tmpdiff"
-  #rm -rf "$tmpdiff"
 }
 
 package() {
