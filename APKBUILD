@@ -33,7 +33,6 @@ makedepends="
   swig
   "
 checkdepends="
-  gfortran 
   postgresql
   postgresql-client
   py3-pillow
@@ -88,6 +87,7 @@ check() {
   cd build
   # Install RDKit for testing
   sudo make install
+
   # Note that pythonTestDirChem test is disabled because of a bug in the source
   # reported here: https://github.com/rdkit/rdkit/issues/2757#issue-516155570
   RDBASE="$builddir" ctest -j $(nproc) -E "testPgSQL|pythonTestDirChem"
