@@ -30,7 +30,6 @@ makedepends="
   py3-cairo 
   py3-numpy-dev 
   python3-dev
-  swig
   "
 checkdepends="
   gfortran 
@@ -50,6 +49,7 @@ subpackages="
   "
 source="
   rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
+  https://sourceforge.net/projects/swig/files/swig/swig-3.0.12/swig-3.0.12.tar.gz
   boost-above-1.56.0.patch
   "
 builddir="$srcdir/rdkit-Release_$_pkgver"
@@ -60,7 +60,12 @@ prepare() {
 }
 
 build() {
-  cd build
+  cd "$srcdir"/swig-3.0.12
+  ./configure --prefix=/usr
+  make -j $(nproc)
+  sudo make install
+
+  cd "$builddir"/build
   RDBASE=/usr \
   PATH=/usr/lib/jvm/default-jvm/bin:$PATH \
   JAVA_HOME=/usr/lib/jvm/default-jvm \
@@ -82,6 +87,9 @@ build() {
   sed -i '62d' "$builddir"/External/INCHI-API/src/INCHI_BASE/src/util.c
   sed -i '62i #define __isascii(val) ((unsigned)(val) <= 0x7F)' "$builddir"/External/INCHI-API/src/INCHI_BASE/src/util.c
   make -j $(nproc)
+
+  cd "$srcdir"/swig-3.0.12
+  sudo make uninstall
 }
 
 check() {
@@ -194,4 +202,5 @@ javadoc() {
 }
 
 sha512sums="a95d100280fb9d1fb95fbf54bf47c259c234f931bfe857feba87bd3e9304753c64c4c4c8d52a336d2543a5635c0c6b60661dea32fca866278fcce0fc0e0152d2  rdkit-2020.03.5.tar.gz
+5eaa2e06d8e4197fd02194051db1e518325dbb074a4c55a91099ad9c55193874f577764afc9029409a41bd520a95154095f26e33ef5add5c102bb2c1d98d33eb  swig-3.0.12.tar.gz
 4dfdb72aa75f8d77f95cc458f48ca2207e77f5cf2e758ff0750ddc68a32c34301376957c12a442f9f199736c07111d8c2d7cda790051d54eece717c7c35faecc  boost-above-1.56.0.patch"
