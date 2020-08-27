@@ -58,7 +58,7 @@ prepare() {
 }
 
 build() {
-  cd build
+  cd "$builddir"/build
   RDBASE=/usr \
   PATH=/usr/lib/jvm/default-jvm/bin:$PATH \
   JAVA_HOME=/usr/lib/jvm/default-jvm \
@@ -75,24 +75,40 @@ build() {
     -DRDK_BUILD_SWIG_WRAPPERS=ON \
     -DRDK_BUILD_TEST_GZIP=ON \
     -Wno-dev
-  # error: undefined reference to `__isascii'
-  # INCHI-API is downloaded by rdkit, so it cannot be patched beforehand.
+  # Note that INCHI-API is downloaded by rdkit, so it cannot be patched beforehand.
   sed -i '62d' "$builddir"/External/INCHI-API/src/INCHI_BASE/src/util.c
   sed -i '62i #define __isascii(val) ((unsigned)(val) <= 0x7F)' "$builddir"/External/INCHI-API/src/INCHI_BASE/src/util.c
   make -j $(nproc)
 }
 
-check() {
-  cd build
-  # Install check dependencies which cannot be specified in $checkdepends
+_pip_install() {
   local tmpprev=$(mktemp)
   local tmpcurr=$(mktemp)
-  local tmpdiff=$(mktemp)
+  _pip_diff=$(mktemp)
   pip3 freeze | sort >> "$tmpprev"
-  sudo pip3 install wheel "pandas==1.1.0"
+  sudo pip3 install "$@"
   pip3 freeze | sort >> "$tmpcurr"
-  comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
+  comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$_pip_diff"
   rm -rf "$tmpprev" "$tmpcurr"
+}
+
+_pip_uninstall() {
+  sudo pip3 uninstall --yes --requirement "$_pip_diff"
+  rm -rf "$_pip_diff"
+}
+
+check() {
+  cd "$builddir"/build
+  # Install check dependencies which cannot be specified in $checkdepends
+  #local tmpprev=$(mktemp)
+  #local tmpcurr=$(mktemp)
+  #local tmpdiff=$(mktemp)
+  #pip3 freeze | sort >> "$tmpprev"
+  #sudo pip3 install wheel "pandas==1.1.0"
+  #pip3 freeze | sort >> "$tmpcurr"
+  #comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
+  #rm -rf "$tmpprev" "$tmpcurr"
+  _pip_install wheel "pandas=1.0.3"
   sudo make install
   RDBASE="$builddir" ctest -j $(nproc) -E testPgSQL
 
@@ -124,12 +140,13 @@ check() {
   # Uninstall check dependencies
   sudo rm -rf `cat install_manifest.txt`
   sudo rm -rf install_manifest.txt
-  sudo pip3 uninstall --yes --requirement "$tmpdiff"
-  rm -rf "$tmpdiff"
+  _pip_uninstall
+#  sudo pip3 uninstall --yes --requirement "$tmpdiff"
+#  rm -rf "$tmpdiff"
 }
 
 package() {
-  cd build
+  cd "$builddir"/build
   make DESTDIR="$pkgdir" install
 
   mv "$pkgdir"/usr/share/RDKit "$pkgdir"/usr/share/rdkit
@@ -147,10 +164,8 @@ data() {
 }
 
 py3() {
-  # This subpackage contains shared libraries, which makes it dependent on architecture.
   pkgdesc="$pkgdesc (for Python3)"
   depends="
-    $pkgname=$pkgver-r$pkgrel 
     py3-cairo 
     py3-numpy
     " 
@@ -158,27 +173,25 @@ py3() {
   local pyver="${subpkgname:2:1}"
   mkdir -p "$subpkgdir"/usr/lib
   mv "$pkgdir"/usr/lib/python$pyver* "$subpkgdir"/usr/lib/
-
-  # TODO: Remove, if possible, messages like "so:libRDKitForceField.so.1 (missing)".
-  #cp -P "$pkgdir/"/usr/lib/*.so.1 "$subpkgdir"/usr/lib/
 }
 
 pgsql() {
   pkgdesc="$pkgdesc (PostgreSQL cartridge)"
-  depends="$pkgname=$pkgver-r$pkgrel"
+  depends=
 
-  install -D -m 644 "$builddir"/build/Code/PgSQL/rdkit/rdkit--3.8.sql "$subpkgdir"/usr/share/postgresql/extension/rdkit--3.8.sql
-  install -D -m 644 "$builddir"/Code/PgSQL/rdkit/rdkit.control "$subpkgdir"/usr/share/postgresql/extension/rdkit.control
-  install -D -m 755 "$builddir"/build/Code/PgSQL/rdkit/librdkit.so "$subpkgdir"/usr/lib/postgresql/librdkit.so
+  install -Dm644 "$builddir"/build/Code/PgSQL/rdkit/rdkit--3.8.sql "$subpkgdir"/usr/share/postgresql/extension/rdkit--3.8.sql
+  install -Dm644 "$builddir"/Code/PgSQL/rdkit/rdkit.control "$subpkgdir"/usr/share/postgresql/extension/rdkit.control
+  install -Dm755 "$builddir"/build/Code/PgSQL/rdkit/librdkit.so "$subpkgdir"/usr/lib/postgresql/librdkit.so
 }
 
 java() {
   pkgdesc="$pkgdesc (Java wrapper)"
-  depends="py3-$pkgname=$pkgver-r$pkgrel"
+  depends=
 
   mkdir -p "$subpkgdir"/usr/share/rdkit
   mv "$pkgdir/$builddir"/Code/JavaWrappers "$subpkgdir"/usr/share/rdkit/
-  cp "$builddir"/Code/JavaWrappers/gmwrapper/*.jar "$subpkgdir"/usr/share/rdkit/JavaWrappers/gmwrapper/
+  install -Dm644 "$builddir"/Code/JavaWrappers/gmwrapper/org.RDKit.jar "$subpkgdir"/usr/share/rdkit/JavaWrappers/gmwrapper/org.RDKit.jar
+  install -Dm644 "$builddir"/Code/JavaWrappers/gmwrapper/org.RDKitDoc.jar "$subpkgdir"/usr/share/rdkit/JavaWrappers/gmwrapper/org.RDKitDoc.jar
   local prefix=${builddir#/}
   rm -rf "$pkgdir/${prefix%%/*}"
 }
@@ -187,8 +200,8 @@ javadoc() {
   pkgdesc="$pkgdesc (Java wrapper documentation)"
   depends=
 
-  mkdir -p "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
-  cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc/* "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper/
+  mkdir -p "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers
+  cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
 sha512sums="e62c8b45753eb59716e6d008c5bf77b0fff2a0533919478dcce23b3a5fd760f9958b4de750982c97cc5ff737c0170789ad295a433276cb927634e813dfaafd54  rdkit-2020.03.1.tar.gz"
