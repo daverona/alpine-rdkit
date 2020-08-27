@@ -4,7 +4,7 @@ pkgname=rdkit
 pkgver=2020.03.1
 _pkgver=2020_03_1
 pkgrel=0
-pkgdesc="A collection of cheminformatics and machine-learning software" 
+pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
 arch="all"
 license="BSD-3-Clause"
@@ -16,20 +16,20 @@ depends_dev="
   eigen-dev
   "
 makedepends="
-  boost-dev 
-  cairo-dev 
-  cmake 
-  eigen-dev 
+  boost-dev
+  cairo-dev
+  cmake
+  eigen-dev
   openjdk8
   postgresql-dev
-  py-numpy-dev 
-  py3-cairo 
+  py-numpy-dev
+  py3-cairo
   py3-numpy
   python3-dev
   swig
   "
 checkdepends="
-  gfortran 
+  gfortran
   postgresql
   postgresql-client
   py3-pillow
@@ -151,9 +151,9 @@ data() {
 py3() {
   pkgdesc="$pkgdesc (for Python3)"
   depends="
-    py3-cairo 
+    py3-cairo
     py3-numpy
-    " 
+    "
 
   local pyver="${subpkgname:2:1}"
   mkdir -p "$subpkgdir"/usr/lib
