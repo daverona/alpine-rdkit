@@ -9,12 +9,7 @@ url="https://www.rdkit.org/"
 arch="all"
 license="BSD-3-Clause"
 #options="!check"  # Don't check if the building environment is shared with others. It will start and stop postgresql server.
-depends="
-  boost-iostreams 
-  boost-python3 
-  boost-serialization 
-  cairo 
-  "
+depends=
 depends_dev="
   boost-dev
   cairo-dev
@@ -40,14 +35,14 @@ checkdepends="
   py3-pillow
   "
 subpackages="
-  $pkgname-doc:doc:noarch
-  $pkgname-java-doc:javadoc:noarch
   $pkgname-data:data:noarch
-  py3-$pkgname:py3 
+  $pkgname-dev
+  $pkgname-doc:doc:noarch
   $pkgname-java
+  $pkgname-java-doc:javadoc:noarch
   $pkgname-pgsql
   $pkgname-static 
-  $pkgname-dev
+  py3-$pkgname:py3 
   "
 source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
 builddir="$srcdir/rdkit-Release_$_pkgver"
@@ -100,15 +95,7 @@ _pip_uninstall() {
 check() {
   cd "$builddir"/build
   # Install check dependencies which cannot be specified in $checkdepends
-  #local tmpprev=$(mktemp)
-  #local tmpcurr=$(mktemp)
-  #local tmpdiff=$(mktemp)
-  #pip3 freeze | sort >> "$tmpprev"
-  #sudo pip3 install wheel "pandas==1.1.0"
-  #pip3 freeze | sort >> "$tmpcurr"
-  #comm -3 "$tmpprev" "$tmpcurr" | sed "s|^\t||" >> "$tmpdiff"
-  #rm -rf "$tmpprev" "$tmpcurr"
-  _pip_install wheel "pandas=1.0.3"
+  _pip_install wheel "pandas==1.0.3"
   sudo make install
   RDBASE="$builddir" ctest -j $(nproc) -E testPgSQL
 
@@ -141,8 +128,6 @@ check() {
   sudo rm -rf `cat install_manifest.txt`
   sudo rm -rf install_manifest.txt
   _pip_uninstall
-#  sudo pip3 uninstall --yes --requirement "$tmpdiff"
-#  rm -rf "$tmpdiff"
 }
 
 package() {
