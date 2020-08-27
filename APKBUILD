@@ -35,14 +35,14 @@ checkdepends="
   py3-pillow
   "
 subpackages="
-  $pkgname-data:data:noarch
-  $pkgname-dev
   $pkgname-doc:doc:noarch
-  $pkgname-java
   $pkgname-java-doc:javadoc:noarch
+  $pkgname-data:data:noarch
+  py3-$pkgname:py3
+  $pkgname-java
   $pkgname-pgsql
-  $pkgname-static 
-  py3-$pkgname:py3 
+  $pkgname-static
+  $pkgname-dev
   "
 source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
 builddir="$srcdir/rdkit-Release_$_pkgver"
