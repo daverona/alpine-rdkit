@@ -1,0 +1,23 @@
+# Note that this patch is required for Boost version above 1.56.0.
+# @see https://github.com/OpenMS/OpenMS/issues/4393#issue-532012670
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -258,7 +258,7 @@
+ 
+   # Try each potential boost-python name until one works
+   foreach(Boost_Python_Lib ${Boost_Python_Names})
+-    find_package(Boost 1.56.0 COMPONENTS "${Boost_Python_Lib}" QUIET)
++    find_package(Boost 1.56.0 COMPONENTS iostreams "${Boost_Python_Lib}" system QUIET)
+     if(Boost_FOUND)
+       break()
+     endif()
+@@ -266,7 +266,7 @@
+ 
+   # Finally just try "python" and hope it is a compatible version
+   if(NOT Boost_FOUND)
+-    find_package(Boost 1.56.0 COMPONENTS python REQUIRED)
++    find_package(Boost 1.56.0 COMPONENTS iostreams python system REQUIRED)
+   endif()
+ 
+ 
