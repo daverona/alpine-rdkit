@@ -4,31 +4,26 @@ pkgname=rdkit
 pkgver=2020.03.3
 _pkgver=2020_03_3
 pkgrel=0
-pkgdesc="A collection of cheminformatics and machine-learning software" 
+pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
 arch="all"
 license="BSD-3-Clause"
 #options="!check"  # Don't check if the building environment is shared with others. It will start and stop postgresql server.
-depends="
-  boost-iostreams 
-  boost-python3 
-  boost-serialization 
-  cairo 
-  "
+depends=
 depends_dev="
   boost-dev
   cairo-dev
   eigen-dev
   "
 makedepends="
-  boost-dev 
-  cairo-dev 
-  cmake 
-  eigen-dev 
+  boost-dev
+  cairo-dev
+  cmake
+  eigen-dev
   openjdk8
   postgresql-dev
-  py3-cairo 
-  py3-numpy-dev 
+  py3-cairo
+  py3-numpy-dev
   python3-dev
   swig
   "
@@ -41,10 +36,10 @@ subpackages="
   $pkgname-doc:doc:noarch
   $pkgname-java-doc:javadoc:noarch
   $pkgname-data:data:noarch
-  py3-$pkgname:py3 
+  py3-$pkgname:py3
   $pkgname-java
   $pkgname-pgsql
-  $pkgname-static 
+  $pkgname-static
   $pkgname-dev
   "
 source="
@@ -59,7 +54,7 @@ prepare() {
 }
 
 build() {
-  cd build
+  cd "$builddir"/build
   RDBASE=/usr \
   PATH=/usr/lib/jvm/default-jvm/bin:$PATH \
   JAVA_HOME=/usr/lib/jvm/default-jvm \
@@ -76,18 +71,17 @@ build() {
     -DRDK_BUILD_SWIG_WRAPPERS=ON \
     -DRDK_BUILD_TEST_GZIP=ON \
     -Wno-dev
-  # error: undefined reference to `__isascii'
-  # INCHI-API is downloaded by rdkit, so it cannot be patched beforehand.
+  # Note that INCHI-API is downloaded by rdkit, so it cannot be patched beforehand.
   sed -i '62d' "$builddir"/External/INCHI-API/src/INCHI_BASE/src/util.c
   sed -i '62i #define __isascii(val) ((unsigned)(val) <= 0x7F)' "$builddir"/External/INCHI-API/src/INCHI_BASE/src/util.c
   make -j $(nproc)
 }
 
 check() {
-  cd build
-  # Install RDKit for testing
+  cd "$builddir"/build
+  # Install check dependencies which cannot be specified in $checkdepends
   sudo make install
-  
+
   # Note that pythonTestDirChem test is disabled because of a bug in the source
   # reported here: https://github.com/rdkit/rdkit/issues/2757#issue-516155570
   RDBASE="$builddir" ctest -j $(nproc) -E "testPgSQL|pythonTestDirChem"
@@ -117,13 +111,13 @@ check() {
   sudo rm -rf /usr/share/postgresql/extension/rdkit*
   sudo rm -rf /usr/lib/postgresql/librdkit.so
 
-  # Uninstall RDKit
+  # Uninstall check dependencies
   sudo rm -rf `cat install_manifest.txt`
   sudo rm -rf install_manifest.txt
 }
 
 package() {
-  cd build
+  cd "$builddir"/build
   make DESTDIR="$pkgdir" install
 
   mv "$pkgdir"/usr/share/RDKit "$pkgdir"/usr/share/rdkit
@@ -141,38 +135,34 @@ data() {
 }
 
 py3() {
-  # This subpackage contains shared libraries, which makes it dependent on architecture.
   pkgdesc="$pkgdesc (for Python3)"
   depends="
-    $pkgname=$pkgver-r$pkgrel 
-    py3-cairo 
+    py3-cairo
     py3-numpy
-    " 
+    "
 
   local pyver="${subpkgname:2:1}"
   mkdir -p "$subpkgdir"/usr/lib
   mv "$pkgdir"/usr/lib/python$pyver* "$subpkgdir"/usr/lib/
-
-  # TODO: Remove, if possible, messages like "so:libRDKitForceField.so.1 (missing)".
-  #cp -P "$pkgdir/"/usr/lib/*.so.1 "$subpkgdir"/usr/lib/
 }
 
 pgsql() {
   pkgdesc="$pkgdesc (PostgreSQL cartridge)"
-  depends="$pkgname=$pkgver-r$pkgrel"
+  depends=
 
-  install -D -m 644 "$builddir"/build/Code/PgSQL/rdkit/rdkit--3.8.sql "$subpkgdir"/usr/share/postgresql/extension/rdkit--3.8.sql
-  install -D -m 644 "$builddir"/Code/PgSQL/rdkit/rdkit.control "$subpkgdir"/usr/share/postgresql/extension/rdkit.control
-  install -D -m 755 "$builddir"/build/Code/PgSQL/rdkit/librdkit.so "$subpkgdir"/usr/lib/postgresql/librdkit.so
+  install -Dm644 "$builddir"/build/Code/PgSQL/rdkit/rdkit--3.8.sql "$subpkgdir"/usr/share/postgresql/extension/rdkit--3.8.sql
+  install -Dm644 "$builddir"/Code/PgSQL/rdkit/rdkit.control "$subpkgdir"/usr/share/postgresql/extension/rdkit.control
+  install -Dm755 "$builddir"/build/Code/PgSQL/rdkit/librdkit.so "$subpkgdir"/usr/lib/postgresql/librdkit.so
 }
 
 java() {
   pkgdesc="$pkgdesc (Java wrapper)"
-  depends="py3-$pkgname=$pkgver-r$pkgrel"
+  depends=
 
   mkdir -p "$subpkgdir"/usr/share/rdkit
   mv "$pkgdir/$builddir"/Code/JavaWrappers "$subpkgdir"/usr/share/rdkit/
-  cp "$builddir"/Code/JavaWrappers/gmwrapper/*.jar "$subpkgdir"/usr/share/rdkit/JavaWrappers/gmwrapper/
+  install -Dm644 "$builddir"/Code/JavaWrappers/gmwrapper/org.RDKit.jar "$subpkgdir"/usr/share/rdkit/JavaWrappers/gmwrapper/org.RDKit.jar
+  install -Dm644 "$builddir"/Code/JavaWrappers/gmwrapper/org.RDKitDoc.jar "$subpkgdir"/usr/share/rdkit/JavaWrappers/gmwrapper/org.RDKitDoc.jar
   local prefix=${builddir#/}
   rm -rf "$pkgdir/${prefix%%/*}"
 }
@@ -181,8 +171,8 @@ javadoc() {
   pkgdesc="$pkgdesc (Java wrapper documentation)"
   depends=
 
-  mkdir -p "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
-  cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc/* "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper/
+  mkdir -p "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers
+  cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
 sha512sums="7f5d626d52e360551a62de9c0df5055c74b2022ce874ef3077a2dfc95f7a6b99430428c787d45978563fcc174f00b30c1dbc7d9f8e19d82aa28f1c62d5408d59  rdkit-2020.03.3.tar.gz
