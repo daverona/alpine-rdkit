@@ -27,9 +27,10 @@ FROM alpine:${ALPINE_VERSION}
 ARG RDKIT_VERSION=Release_2020_03_5
 ARG ALPINE_VERSION
 RUN _version=${RDKIT_VERSION#Release_} && _version=${_version//_/.} \
-  && wget -qO /etc/apk/keys/daverona.rsa.pub https://github.com/daverona/alpine-rdkit/releases/download/alpine${ALPINE_VERSION}-${_version}-r0/daverona.rsa.pub \
+  && _release=r0 \
+  && wget -qO /etc/apk/keys/daverona.rsa.pub https://github.com/daverona/alpine-rdkit/releases/download/alpine${ALPINE_VERSION}-${_version}-${_release}/daverona.rsa.pub \
   && for apk in rdkit py3-rdkit; do \
-       wget -q https://github.com/daverona/alpine-rdkit/releases/download/alpine${ALPINE_VERSION}-${_version}-r0/${apk}-${_version}-r0.apk; \
+       wget -q https://github.com/daverona/alpine-rdkit/releases/download/alpine${ALPINE_VERSION}-${_version}-${_release}/${apk}-${_version}-${_release}.apk; \
      done \
   && apk add --no-cache *.apk \
   && rm -rf *.apk /etc/apk/keys/daverona.rsa.pub
