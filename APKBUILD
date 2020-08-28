@@ -32,6 +32,7 @@ checkdepends="
   postgresql-client
   py3-pillow
   py3-pip
+  py3-wheel
   "
 subpackages="
   $pkgname-doc:doc:noarch
@@ -108,7 +109,7 @@ _pip_uninstall() {
 check() {
   cd "$builddir"/build
   # Install check dependencies which cannot be specified in $checkdepends
-  _pip_install wheel "pandas==1.0.3"
+  _pip_install "pandas==1.0.3"
   sudo make install
   RDBASE="$builddir" ctest -j $(nproc) -E testPgSQL
 
