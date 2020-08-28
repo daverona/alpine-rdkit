@@ -20,7 +20,7 @@ rm -rf /etc/apk/keys/daverona.rsa.pub
 
 ## Docker Installation
 
-```docker
+```dockerfile
 ARG ALPINE_VERSION=3.12
 FROM alpine:${ALPINE_VERSION}
 
