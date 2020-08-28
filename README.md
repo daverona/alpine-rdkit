@@ -5,11 +5,11 @@
 This is a repository of Alpine APKs of [RDKit](https://www.rdkit.org/).
 
 * GitLab repository: [https://gitlab.com/daverona/alpine/rdkit](https://gitlab.com/daverona/alpine/rdkit)
-* Available releases: [https://gitlab.com/daverona/alpine/rdkit/-/releases](https://gitlab.com/daverona/alpine/rdkit/-/releases)
+* GitHub releases: [https://github.com/daverona/alpine-rdkit/releases](https://github.com/daverona/alpine-rdkit/releases)
 
 ## Installtion
 
-Download APK files and `daverona.rsa.pub` from the [release page](https://gitlab.com/daverona/alpine/rdkit/-/releases).
+Download APK files and `daverona.rsa.pub` from the [release page](https://github.com/daverona/alpine-rdkit/releases).
 And run these commands (as root or sudoer) in a terminal:
 
 ```bash
