@@ -30,7 +30,6 @@ checkdepends="
   postgresql
   postgresql-client
   py3-pillow
-  py3-pip
   "
 subpackages="
   $pkgname-doc:doc:noarch
