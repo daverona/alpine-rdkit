@@ -18,6 +18,25 @@ apk add *.apk
 rm -rf /etc/apk/keys/daverona.rsa.pub
 ```
 
+## Docker Installation
+
+```docker
+ARG ALPINE_VERSION=3.12
+FROM alpine:${ALPINE_VERSION}
+
+ARG RDKIT_VERSION=Release_2020_03_5
+ARG ALPINE_VERSION
+RUN _version=${RDKIT_VERSION#Release_} && _version=${_version//_/.} \
+  && wget -qO /etc/apk/keys/daverona.rsa.pub https://github.com/daverona/alpine-rdkit/releases/download/alpine${ALPINE_VERSION}-${_version}-r0/daverona.rsa.pub \
+  && for apk in rdkit py3-rdkit; do \
+       wget -q https://github.com/daverona/alpine-rdkit/releases/download/alpine${ALPINE_VERSION}-${_version}-r0/${apk}-${_version}-r0.apk; \
+     done \
+  && apk add --no-cache *.apk \
+  && rm -rf *.apk /etc/apk/keys/daverona.rsa.pub
+
+CMD ["python3"]
+```
+
 ## References
 
 * RDKit repository: [https://github.com/rdkit/rdkit](https://github.com/rdkit/rdkit)
