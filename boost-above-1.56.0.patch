@@ -3,7 +3,7 @@
 
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -252,7 +252,7 @@
+@@ -251,7 +251,7 @@
  
    # Try each potential boost-python name until one works
    foreach(Boost_Python_Lib ${Boost_Python_Names})
@@ -12,7 +12,7 @@
      if(Boost_FOUND)
        break()
      endif()
-@@ -260,7 +260,7 @@
+@@ -259,7 +259,7 @@
  
    # Finally just try "python" and hope it is a compatible version
    if(NOT Boost_FOUND)
