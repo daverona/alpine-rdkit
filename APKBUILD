@@ -1,8 +1,8 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
 pkgname=rdkit
-pkgver=2019.09.1
-_pkgver=2019_09_1
+pkgver=2019.09.2
+_pkgver=2019_09_2
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
@@ -191,5 +191,5 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
-sha512sums="ee3ed980efc80caf872bd335feef5a94b5f8593e87e5c9f9cc865c56fb8c1cb5d9fe8334bd7f63464a9073386ec01d3dcb19164f645fb9c4596f6f17c345a501  rdkit-2019.09.1.tar.gz
+sha512sums="285bb962f0079a7ef8bcf55ed7070e36f8d25804f5e1fde1583c676bfc6de5536fc75522f91905d418b6545dd8155ed33e99ddec4013669f817e30e37b00cce9  rdkit-2019.09.2.tar.gz
 b3a4f05460f8d47ba2960f0ad982584604509d33950cb14ce81a77e149b1764b2b9d70c261b8707e5b4e57527ba37288c936afd5ef4c9cd8612f6b29d77a3364  central-maven-org.patch"
