@@ -1,3 +1,6 @@
+# Note that this patch is required for PostgreSQL 12
+# @see https://github.com/rdkit/rdkit/issues/2700
+
 --- a/Code/PgSQL/rdkit/expected/avalon.out
 +++ b/Code/PgSQL/rdkit/expected/avalon.out
 @@ -1,3 +1,4 @@
