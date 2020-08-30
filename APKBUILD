@@ -1,8 +1,8 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
 pkgname=rdkit
-pkgver=2019.03.2
-_pkgver=2019_03_2
+pkgver=2019.03.3
+_pkgver=2019_03_3
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
@@ -29,6 +29,7 @@ makedepends="
   swig
   "
 checkdepends="
+  diffutils
   gfortran
   postgresql
   postgresql-client
@@ -192,5 +193,5 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
-sha512sums="acd854bf7e5e68a2197810eb607119f47c2825dd59304a8695d9955d7e540cf4fdbd7e208ad7df3cbebef74a12a607f8aad4877ab402d7a4bc865832fed6725c  rdkit-2019.03.2.tar.gz
+sha512sums="d3041b8780d94af330468d2f601038762af83ab101c31c07734e0d206e2c7bf331f73d9aed74d32680e9c0cbe1b920951c9e412da60662db9d698cec56f20d8a  rdkit-2019.03.3.tar.gz
 b3a4f05460f8d47ba2960f0ad982584604509d33950cb14ce81a77e149b1764b2b9d70c261b8707e5b4e57527ba37288c936afd5ef4c9cd8612f6b29d77a3364  central-maven-org.patch"
