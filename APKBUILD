@@ -89,8 +89,6 @@ check() {
   # reported here: https://github.com/rdkit/rdkit/issues/2757#issue-516155570
   RDBASE="$builddir" ctest -j $(nproc) --output-on-failure -E "testPgSQL|pythonTestDirChem"
 
-  # https://github.com/rdkit/rdkit/issues/2700
-
   # Test PostgreSQL cartridge
   # Install the cartridge
   sudo sh "$builddir"/build/Code/PgSQL/rdkit/pgsql_install.sh
