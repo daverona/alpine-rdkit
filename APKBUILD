@@ -1,8 +1,8 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
 pkgname=rdkit
-pkgver=2019.09.1
-_pkgver=2019_09_1
+pkgver=2019.03.1
+_pkgver=2019_03_1
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
@@ -100,29 +100,30 @@ check() {
   # Install check dependencies which cannot be specified in $checkdepends
   _pip_install wheel "pandas==1.0.3"
   sudo make install
-  RDBASE="$builddir" ctest -j $(nproc) -E testPgSQL
+  RDBASE="$builddir" ctest -j $(nproc) --output-on-failure -E testPgSQL 
 
   # Test PostgreSQL cartridge
   # Install the cartridge
   sudo sh "$builddir"/build/Code/PgSQL/rdkit/pgsql_install.sh
   # Start the server
-  sudo mkdir -p /run/postgresql /tmp/postgresql
-  sudo chown postgres:postgres /run/postgresql /tmp/postgresql
-  sudo -u postgres initdb -D /tmp/postgresql
-  sudo -u postgres pg_ctl -D /tmp/postgresql start
+  local _pgtmp="$(mktemp -d)"
+  sudo mkdir -p /run/postgresql $_pgtmp
+  sudo chown postgres:postgres /run/postgresql $_pgtmp
+  sudo -u postgres initdb -D $_pgtmp
+  sudo -u postgres pg_ctl -D $_pgtmp start
   # Set permission of files and directories
   sudo chmod o+w -R "$builddir"/build/Testing/Temporary
   sudo chmod o+w -R "$builddir"/build/Code/PgSQL/rdkit
   # Do test
-  sudo RDBASE="$builddir" -u postgres ctest -j $(nproc) -R testPgSQL
+  sudo RDBASE="$builddir" -u postgres ctest -j $(nproc) --output-on-failure -R testPgSQL
   # Set permission and ownership back
   sudo chmod o-w -R "$builddir"/build/Testing/Temporary
   sudo chmod o-w -R "$builddir"/build/Code/PgSQL/rdkit
   sudo chown -R $(id -u):$(id -g) "$builddir"/build/Testing/Temporary
   sudo chown -R $(id -u):$(id -g) "$builddir"/build/Code/PgSQL/rdkit
   # Stop the server
-  sudo -u postgres pg_ctl -D /tmp/postgresql stop
-  sudo rm -rf /run/postgresql /tmp/postgresql
+  sudo -u postgres pg_ctl -D $_pgtmp stop
+  sudo rm -rf /run/postgresql $_pgtmp
   # Delete the cartridge
   sudo rm -rf /usr/share/postgresql/extension/rdkit*
   sudo rm -rf /usr/lib/postgresql/librdkit.so
@@ -168,7 +169,7 @@ pgsql() {
   depends=
 
   install -Dm755 "$builddir"/build/Code/PgSQL/rdkit/librdkit.so "$subpkgdir"/usr/lib/postgresql/librdkit.so
-  install -Dm644 "$builddir"/build/Code/PgSQL/rdkit/rdkit--3.8.sql "$subpkgdir"/usr/share/postgresql/extension/rdkit--3.8.sql
+  install -Dm644 "$builddir"/build/Code/PgSQL/rdkit/rdkit--3.7.sql "$subpkgdir"/usr/share/postgresql/extension/rdkit--3.7.sql
   install -Dm644 "$builddir"/Code/PgSQL/rdkit/rdkit.control "$subpkgdir"/usr/share/postgresql/extension/rdkit.control
 }
 
@@ -191,5 +192,5 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
-sha512sums="ee3ed980efc80caf872bd335feef5a94b5f8593e87e5c9f9cc865c56fb8c1cb5d9fe8334bd7f63464a9073386ec01d3dcb19164f645fb9c4596f6f17c345a501  rdkit-2019.09.1.tar.gz
+sha512sums="811269d004bebfee49a1b6663e390e6b56a41ec745094c7abad3c680063ac67f5166c827b7d3f811381f3846b4b19010746e65aa014f9228d888ceb8948dee76  rdkit-2019.03.1.tar.gz
 b3a4f05460f8d47ba2960f0ad982584604509d33950cb14ce81a77e149b1764b2b9d70c261b8707e5b4e57527ba37288c936afd5ef4c9cd8612f6b29d77a3364  central-maven-org.patch"
