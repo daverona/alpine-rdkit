@@ -1,3 +1,6 @@
+# Note that this patch is required for Release_2019_03_3
+# @see https://github.com/rdkit/rdkit/pull/2520
+
 --- a/Code/PgSQL/rdkit/expected/reaction.out	2019-06-25 08:36:34.000000000 +0000
 +++ b/Code/PgSQL/rdkit/expected/reaction.out	2020-08-30 22:19:58.695446049 +0000
 @@ -967,32 +967,32 @@
