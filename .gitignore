@@ -4,3 +4,4 @@
 !README.md
 !APKBUILD
 !central-maven-org.patch
+!pgsql-reaction.patch

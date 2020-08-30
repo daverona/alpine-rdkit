@@ -48,6 +48,7 @@ subpackages="
 source="
   rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
   central-maven-org.patch
+  pgsql-reaction.patch
   "
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
@@ -194,4 +195,5 @@ javadoc() {
 }
 
 sha512sums="d3041b8780d94af330468d2f601038762af83ab101c31c07734e0d206e2c7bf331f73d9aed74d32680e9c0cbe1b920951c9e412da60662db9d698cec56f20d8a  rdkit-2019.03.3.tar.gz
-b3a4f05460f8d47ba2960f0ad982584604509d33950cb14ce81a77e149b1764b2b9d70c261b8707e5b4e57527ba37288c936afd5ef4c9cd8612f6b29d77a3364  central-maven-org.patch"
+b3a4f05460f8d47ba2960f0ad982584604509d33950cb14ce81a77e149b1764b2b9d70c261b8707e5b4e57527ba37288c936afd5ef4c9cd8612f6b29d77a3364  central-maven-org.patch
+55b7161088caa5ea53a1ea8657bf1262533d366580d23acb4436ed2381c1703f385b28a9652510169b2b2e4d6f3e243ac4fa0b1e111db1d692b3f039fa8d4d2f  pgsql-reaction.patch"
