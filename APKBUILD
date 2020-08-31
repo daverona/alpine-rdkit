@@ -1,5 +1,6 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
+
 pkgname=rdkit
 pkgver=2019.03.4
 _pkgver=2019_03_4
