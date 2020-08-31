@@ -97,29 +97,30 @@ check() {
   # Install check dependencies which cannot be specified in $checkdepends
   _pip_install wheel "pandas==1.0.3"
   sudo make install
-  RDBASE="$builddir" ctest -j $(nproc) -E testPgSQL
+  RDBASE="$builddir" ctest -j $(nproc) --output-on-failure -E testPgSQL
 
   # Test PostgreSQL cartridge
   # Install the cartridge
   sudo sh "$builddir"/build/Code/PgSQL/rdkit/pgsql_install.sh
   # Start the server
-  sudo mkdir -p /run/postgresql /tmp/postgresql
-  sudo chown postgres:postgres /run/postgresql /tmp/postgresql
-  sudo -u postgres initdb -D /tmp/postgresql
-  sudo -u postgres pg_ctl -D /tmp/postgresql start
+  local _pgtmp="$(mktemp -d)"
+  sudo mkdir -p /run/postgresql $_pgtmp
+  sudo chown postgres:postgres /run/postgresql $_pgtmp
+  sudo -u postgres initdb -D $_pgtmp
+  sudo -u postgres pg_ctl -D $_pgtmp start
   # Set permission of files and directories
   sudo chmod o+w -R "$builddir"/build/Testing/Temporary
   sudo chmod o+w -R "$builddir"/build/Code/PgSQL/rdkit
   # Do test
-  sudo RDBASE="$builddir" -u postgres ctest -j $(nproc) -R testPgSQL
+  sudo RDBASE="$builddir" -u postgres ctest -j $(nproc) --output-on-failure -R testPgSQL
   # Set permission and ownership back
   sudo chmod o-w -R "$builddir"/build/Testing/Temporary
   sudo chmod o-w -R "$builddir"/build/Code/PgSQL/rdkit
   sudo chown -R $(id -u):$(id -g) "$builddir"/build/Testing/Temporary
   sudo chown -R $(id -u):$(id -g) "$builddir"/build/Code/PgSQL/rdkit
   # Stop the server
-  sudo -u postgres pg_ctl -D /tmp/postgresql stop
-  sudo rm -rf /run/postgresql /tmp/postgresql
+  sudo -u postgres pg_ctl -D $_pgtmp stop
+  sudo rm -rf /run/postgresql $_pgtmp
   # Delete the cartridge
   sudo rm -rf /usr/share/postgresql/extension/rdkit*
   sudo rm -rf /usr/lib/postgresql/librdkit.so
