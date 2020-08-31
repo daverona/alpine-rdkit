@@ -1,5 +1,6 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
+
 pkgname=rdkit
 pkgver=2019.03.1
 _pkgver=2019_03_1
@@ -191,6 +192,7 @@ javadoc() {
   mkdir -p "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
+
 
 sha512sums="811269d004bebfee49a1b6663e390e6b56a41ec745094c7abad3c680063ac67f5166c827b7d3f811381f3846b4b19010746e65aa014f9228d888ceb8948dee76  rdkit-2019.03.1.tar.gz
 b3a4f05460f8d47ba2960f0ad982584604509d33950cb14ce81a77e149b1764b2b9d70c261b8707e5b4e57527ba37288c936afd5ef4c9cd8612f6b29d77a3364  central-maven-org.patch"
