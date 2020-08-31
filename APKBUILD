@@ -1,8 +1,8 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
 pkgname=rdkit
-pkgver=2019.03.1
-_pkgver=2019_03_1
+pkgver=2019.03.2
+_pkgver=2019_03_2
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
@@ -187,7 +187,7 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
-sha512sums="811269d004bebfee49a1b6663e390e6b56a41ec745094c7abad3c680063ac67f5166c827b7d3f811381f3846b4b19010746e65aa014f9228d888ceb8948dee76  rdkit-2019.03.1.tar.gz
+sha512sums="acd854bf7e5e68a2197810eb607119f47c2825dd59304a8695d9955d7e540cf4fdbd7e208ad7df3cbebef74a12a607f8aad4877ab402d7a4bc865832fed6725c  rdkit-2019.03.2.tar.gz
 5eaa2e06d8e4197fd02194051db1e518325dbb074a4c55a91099ad9c55193874f577764afc9029409a41bd520a95154095f26e33ef5add5c102bb2c1d98d33eb  swig-3.0.12.tar.gz
 0a2b9f863238a9949e6640ed90019db7fda3e7c353a9f2b92c89ea80897c3cfab3d11a590443902714cf3e1f7d3c0e93acc8dde75f7e9134a9f729819b1d7824  boost-above-1.56.0.patch
 b3a4f05460f8d47ba2960f0ad982584604509d33950cb14ce81a77e149b1764b2b9d70c261b8707e5b4e57527ba37288c936afd5ef4c9cd8612f6b29d77a3364  central-maven-org.patch
