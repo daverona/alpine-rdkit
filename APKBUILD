@@ -85,7 +85,7 @@ check() {
 
   # Note that pythonTestDirChem test is disabled because of a bug in the source
   # reported here: https://github.com/rdkit/rdkit/issues/2757#issue-516155570
-  RDBASE="$builddir" ctest -j $(nproc) -E "testPgSQL|pythonTestDirChem"
+  RDBASE="$builddir" ctest -j $(nproc) --output-on-failure -E "testPgSQL|pythonTestDirChem"
 
   # Test PostgreSQL cartridge
   # Install the cartridge
@@ -100,7 +100,7 @@ check() {
   sudo chmod o+w -R "$builddir"/build/Testing/Temporary
   sudo chmod o+w -R "$builddir"/build/Code/PgSQL/rdkit
   # Do test
-  sudo RDBASE="$builddir" -u postgres ctest -j $(nproc) -R testPgSQL
+  sudo RDBASE="$builddir" -u postgres ctest -j $(nproc) --output-on-failure -R testPgSQL
   # Set permission and ownership back
   sudo chmod o-w -R "$builddir"/build/Testing/Temporary
   sudo chmod o-w -R "$builddir"/build/Code/PgSQL/rdkit
