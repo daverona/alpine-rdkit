@@ -15,7 +15,7 @@ And run these commands (as root or sudoer) in a terminal:
 ```bash
 cp daverona.rsa.pub /etc/apk/keys
 apk add *.apk
-rm -rf /etc/apk/keys/daverona.rsa.pub
+rm -rf *.apk /etc/apk/keys/daverona.rsa.pub
 ```
 
 ## Docker Installation
