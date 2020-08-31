@@ -1,8 +1,8 @@
 # Contributor: daverona <egkimatwork@gmail.com>
 # Maintainer: daverona <egkimatwork@gmail.com>
 pkgname=rdkit
-pkgver=2019.03.2
-_pkgver=2019_03_2
+pkgver=2019.03.3
+_pkgver=2019_03_3
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
@@ -48,6 +48,7 @@ source="
   boost-above-1.56.0.patch
   central-maven-org.patch
   postgresql-12.patch
+  pgsql-reaction.patch
   "
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
@@ -178,8 +179,8 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
-sha512sums="acd854bf7e5e68a2197810eb607119f47c2825dd59304a8695d9955d7e540cf4fdbd7e208ad7df3cbebef74a12a607f8aad4877ab402d7a4bc865832fed6725c  rdkit-2019.03.2.tar.gz
+sha512sums="d3041b8780d94af330468d2f601038762af83ab101c31c07734e0d206e2c7bf331f73d9aed74d32680e9c0cbe1b920951c9e412da60662db9d698cec56f20d8a  rdkit-2019.03.3.tar.gz
 0a2b9f863238a9949e6640ed90019db7fda3e7c353a9f2b92c89ea80897c3cfab3d11a590443902714cf3e1f7d3c0e93acc8dde75f7e9134a9f729819b1d7824  boost-above-1.56.0.patch
 b3a4f05460f8d47ba2960f0ad982584604509d33950cb14ce81a77e149b1764b2b9d70c261b8707e5b4e57527ba37288c936afd5ef4c9cd8612f6b29d77a3364  central-maven-org.patch
-e70de00e6f296d690ad3a10462a41872b3122e5eb11f05b94fefab51a3b49ebcd3e9772bab96157fc82b0de0633e8e7bc29e36e9b48aa60447d5a2748a618e11  postgresql-12.patch"
-
+e70de00e6f296d690ad3a10462a41872b3122e5eb11f05b94fefab51a3b49ebcd3e9772bab96157fc82b0de0633e8e7bc29e36e9b48aa60447d5a2748a618e11  postgresql-12.patch
+41dbbb6e7f6c0ad761029d5695fc9ddb308188edadb4c57854bc248fe8154a17c49e23919c93385303603068838e5feff5136ec58e75663edc71746a6ac8f658  pgsql-reaction.patch"
