@@ -3,4 +3,4 @@
 !.gitlab-ci.yml
 !README.md
 !APKBUILD
-!reaction.patch
+!pgsql-reaction.patch

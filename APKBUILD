@@ -48,7 +48,7 @@ subpackages="
   "
 source="
   rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
-  reaction.patch
+  pgsql-reaction.patch
   "
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
@@ -195,4 +195,4 @@ javadoc() {
 }
 
 sha512sums="bc0a1ca21eaced83332de52f0d8ca81a5efc9585013edbccf277cf791672dac20cef16eff459441c9a699d6486064108311968247122d403e690f3d391b16b68  rdkit-2020.03.6.tar.gz
-033a5307f1e5dec619ca6e1ad621b1fbb6f015dc0cb7b0e79b774d528c3cff21e16a56bf806f99242e8b2eaedf66dfdfac3fd7abdb92fff7d64f753236d37838  reaction.patch"
+033a5307f1e5dec619ca6e1ad621b1fbb6f015dc0cb7b0e79b774d528c3cff21e16a56bf806f99242e8b2eaedf66dfdfac3fd7abdb92fff7d64f753236d37838  pgsql-reaction.patch"
