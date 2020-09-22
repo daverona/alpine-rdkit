@@ -3,3 +3,4 @@
 !.gitlab-ci.yml
 !README.md
 !APKBUILD
+!reaction.patch

@@ -2,8 +2,8 @@
 # Maintainer: daverona <egkimatwork@gmail.com>
 
 pkgname=rdkit
-pkgver=2020.03.5
-_pkgver=2020_03_5
+pkgver=2020.03.6
+_pkgver=2020_03_6
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
@@ -30,6 +30,7 @@ makedepends="
   swig
   "
 checkdepends="
+  diffutils
   gfortran
   postgresql
   postgresql-client
@@ -45,7 +46,10 @@ subpackages="
   $pkgname-static
   $pkgname-dev
   "
-source="rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz"
+source="
+  rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
+  reaction.patch
+  "
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
 prepare() {
@@ -190,4 +194,5 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
-sha512sums="a95d100280fb9d1fb95fbf54bf47c259c234f931bfe857feba87bd3e9304753c64c4c4c8d52a336d2543a5635c0c6b60661dea32fca866278fcce0fc0e0152d2  rdkit-2020.03.5.tar.gz"
+sha512sums="bc0a1ca21eaced83332de52f0d8ca81a5efc9585013edbccf277cf791672dac20cef16eff459441c9a699d6486064108311968247122d403e690f3d391b16b68  rdkit-2020.03.6.tar.gz
+033a5307f1e5dec619ca6e1ad621b1fbb6f015dc0cb7b0e79b774d528c3cff21e16a56bf806f99242e8b2eaedf66dfdfac3fd7abdb92fff7d64f753236d37838  reaction.patch"
