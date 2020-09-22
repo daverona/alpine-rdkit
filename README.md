@@ -24,7 +24,7 @@ rm -rf *.apk /etc/apk/keys/daverona.rsa.pub
 ARG ALPINE_VERSION=3.12
 FROM alpine:${ALPINE_VERSION}
 
-ARG RDKIT_VERSION=Release_2020_03_5
+ARG RDKIT_VERSION=Release_2020_03_6
 ARG ALPINE_VERSION
 RUN _version=${RDKIT_VERSION#Release_} && _version=${_version//_/.} \
   && _release=r0 \
