@@ -2,8 +2,8 @@
 # Maintainer: daverona <egkimatwork@gmail.com>
 
 pkgname=rdkit
-pkgver=2020.03.6
-_pkgver=2020_03_6
+pkgver=2020.09.1b1
+_pkgver=2020_09_1b1
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
@@ -48,8 +48,7 @@ subpackages="
 source="
   rdkit-$pkgver.tar.gz::https://github.com/rdkit/rdkit/archive/Release_$_pkgver.tar.gz
   https://sourceforge.net/projects/swig/files/swig/swig-3.0.12/swig-3.0.12.tar.gz
-  boost-above-1.56.0.patch
-  pgsql-reaction.patch
+  boost-above-1.58.0.patch
   "
 builddir="$srcdir/rdkit-Release_$_pkgver"
 
@@ -205,7 +204,6 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
-sha512sums="bc0a1ca21eaced83332de52f0d8ca81a5efc9585013edbccf277cf791672dac20cef16eff459441c9a699d6486064108311968247122d403e690f3d391b16b68  rdkit-2020.03.6.tar.gz
+sha512sums="5fa4b4a0b1684434ba9db5bdbe48752b33478441da680f276f00267eda015d2be44d397198a585d685a33cc5c606a45c771a80a14c0b581877fc3d0f9f781a12  rdkit-2020.09.1b1.tar.gz
 5eaa2e06d8e4197fd02194051db1e518325dbb074a4c55a91099ad9c55193874f577764afc9029409a41bd520a95154095f26e33ef5add5c102bb2c1d98d33eb  swig-3.0.12.tar.gz
-4dfdb72aa75f8d77f95cc458f48ca2207e77f5cf2e758ff0750ddc68a32c34301376957c12a442f9f199736c07111d8c2d7cda790051d54eece717c7c35faecc  boost-above-1.56.0.patch
-033a5307f1e5dec619ca6e1ad621b1fbb6f015dc0cb7b0e79b774d528c3cff21e16a56bf806f99242e8b2eaedf66dfdfac3fd7abdb92fff7d64f753236d37838  pgsql-reaction.patch"
+5b659ea433f42dcee77e02556a2dcfad27d8461e690474297b130a680b6a1e921024712160dc98783fe0580acec06e2d3b26ceed61c787f4b78fad60af6abbe3  boost-above-1.58.0.patch"

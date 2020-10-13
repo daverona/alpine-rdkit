@@ -1,0 +1,20 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -276,7 +276,7 @@
+ 
+   # Try each potential boost-python name until one works
+   foreach(Boost_Python_LibN ${Boost_Python_Names})
+-    find_package(Boost ${RDK_BOOST_VERSION} COMPONENTS "${Boost_Python_LibN}" QUIET)
++    find_package(Boost ${RDK_BOOST_VERSION} COMPONENTS iostreams "${Boost_Python_LibN}" system QUIET)
+     if(Boost_FOUND)
+       set(Boost_Python_Lib ${Boost_Python_LibN})
+       break()
+@@ -284,7 +284,7 @@
+   endforeach()
+   # Finally just try "python" and hope it is a compatible version
+   if(NOT Boost_FOUND)
+-    find_package(Boost ${RDK_BOOST_VERSION} COMPONENTS python REQUIRED)
++    find_package(Boost ${RDK_BOOST_VERSION} COMPONENTS iostreams python system REQUIRED)
+     set(Boost_Python_Lib "python")
+   endif()
+ 
