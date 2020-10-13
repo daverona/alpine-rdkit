@@ -3,5 +3,4 @@
 !.gitlab-ci.yml
 !README.md
 !APKBUILD
-!boost-above-1.56.0.patch
-!pgsql-reaction.patch
+!boost-above-1.58.0.patch
