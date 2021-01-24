@@ -2,8 +2,8 @@
 # Maintainer: daverona <egkimatwork@gmail.com>
 
 pkgname=rdkit
-pkgver=2020.09.3
-_pkgver=2020_09_3
+pkgver=2020.09.4
+_pkgver=2020_09_4
 pkgrel=0
 pkgdesc="A collection of cheminformatics and machine-learning software"
 url="https://www.rdkit.org/"
@@ -192,5 +192,5 @@ javadoc() {
   cp -R "$builddir"/Code/JavaWrappers/gmwrapper/doc "$subpkgdir"/usr/share/doc/rdkit/JavaWrappers/gmwrapper
 }
 
-sha512sums="af27c6cad3f3b22299dba4337994286124996f1e7db8fa29221c77d747936b7f2f769ed9ceaf69a677f8d9184370a556da3001ad548e4a0b35d60c5999879a6d  rdkit-2020.09.3.tar.gz
+sha512sums="69e3c21237efc943ec1d3a9a7c0189064bc8ea930ac786e7b5c86e827fef595559fd8b52fcacdb9c2ec37859ffb9869498a902bb390debfbfe27e67b9aca718e  rdkit-2020.09.4.tar.gz
 a8ded52bfb9f6504a207af52a1a3a26f385c861d00b4458a5b072cb5e06113bb2f83beb4e92a39c805cc45776d11ba7fd53bec8499f1a8291097b864112a0430  boost-above-1.58.0.patch"
